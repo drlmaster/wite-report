@@ -1,0 +1,304 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <title>基于双臂任务感知适配的视觉-语言-动作机器人饮品服务系统</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 22mm 20mm 22mm 20mm;
+    }
+    body {
+      font-family: "Noto Serif CJK SC", "Noto Sans CJK SC", "Droid Sans Fallback", serif;
+      color: #1f2933;
+      background: #ffffff;
+      line-height: 1.72;
+      font-size: 11.2pt;
+      margin: 0;
+    }
+    .page {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    h1, h2, h3 {
+      font-family: "Noto Sans CJK SC", "Droid Sans Fallback", sans-serif;
+      color: #111827;
+      break-after: avoid;
+      line-height: 1.35;
+    }
+    h1 {
+      text-align: center;
+      font-size: 22pt;
+      margin: 18mm 0 8mm;
+      font-weight: 700;
+    }
+    h2 {
+      font-size: 15pt;
+      margin: 8mm 0 3mm;
+      border-bottom: 1px solid #d0d7de;
+      padding-bottom: 1.5mm;
+    }
+    h3 {
+      font-size: 12.5pt;
+      margin: 5mm 0 1.5mm;
+    }
+    p {
+      margin: 0 0 2.7mm;
+      text-align: justify;
+    }
+    .subtitle {
+      text-align: center;
+      color: #52606d;
+      margin-bottom: 11mm;
+      font-size: 11pt;
+    }
+    .abstract {
+      border: 1px solid #d9e2ec;
+      background: #f8fafc;
+      padding: 5mm 6mm;
+      margin-bottom: 7mm;
+      border-radius: 4px;
+    }
+    .abstract strong {
+      font-family: "Noto Sans CJK SC", sans-serif;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 4mm 0 6mm;
+      font-size: 9.4pt;
+      line-height: 1.55;
+      break-inside: avoid;
+    }
+    th, td {
+      border: 1px solid #cbd5e1;
+      padding: 2.2mm 2.6mm;
+      vertical-align: top;
+      text-align: left;
+    }
+    th {
+      background: #eef2f7;
+      color: #102a43;
+      font-weight: 700;
+      font-family: "Noto Sans CJK SC", sans-serif;
+    }
+    ul {
+      margin: 1mm 0 3mm 6mm;
+      padding-left: 5mm;
+    }
+    li {
+      margin-bottom: 1.2mm;
+    }
+    .equation {
+      font-family: "Noto Serif CJK SC", "Noto Sans CJK SC", serif;
+      text-align: center;
+      margin: 3.8mm 0;
+      padding: 2.8mm 4mm;
+      background: #fbfdff;
+      border: 1px solid #e5e7eb;
+      border-radius: 4px;
+      color: #111827;
+    }
+    .mono {
+      font-family: "Noto Sans Mono CJK SC", monospace;
+      background: #f3f4f6;
+      padding: 0 1.2mm;
+      border-radius: 3px;
+      font-size: 9.8pt;
+    }
+    .note {
+      color: #475569;
+      font-size: 10.2pt;
+    }
+    .toc {
+      columns: 2;
+      column-gap: 12mm;
+      margin-bottom: 8mm;
+      font-size: 10.4pt;
+    }
+    .toc p {
+      margin-bottom: 1mm;
+      text-align: left;
+    }
+    .break {
+      break-before: page;
+    }
+  </style>
+</head>
+<body>
+<main class="page">
+  <h1>基于双臂任务感知适配的视觉-语言-动作机器人饮品服务系统</h1>
+  <p class="subtitle">研究生技术竞赛技术报告初稿<br>核心方法：Bimanual Task-aware Adapter（BTA）</p>
+
+  <section class="abstract">
+    <p><strong>摘要：</strong>面向研究生技术竞赛中的双臂机器人饮品服务任务，本文设计一套基于 GR00T/VLA 的视觉-语言-动作机器人系统。系统以智元 G1 双臂机器人为硬件平台，面向饮料抓取、递送、右臂抓取营养快线并倒入杯子三分之一、左臂抓取杯子并放置到杯垫等任务，提出双臂任务感知适配模块 Bimanual Task-aware Adapter（BTA）。BTA 在 GR00T 类 VLA 基础模型的后训练和真机部署过程中，引入任务角色 token、阶段感知提示、左右臂动作子空间划分和角色感知 mask loss，用于缓解双臂任务中左右臂角色不清、动作维度耦合、左右臂学习不均衡和协同阶段切换困难等问题。本文结合 GR00T N1、TinyVLA、ACT/ALOHA、双臂解耦交互框架、YOTO、Transformer 双臂模仿学习和 DAISS 等论文依据，给出系统方案、模型设计、实验评价和后续工作规划。</p>
+    <p><strong>关键词：</strong>视觉-语言-动作模型；双臂机器人；模仿学习；动作块；任务感知适配；饮品服务</p>
+  </section>
+
+  <h2>目录</h2>
+  <div class="toc">
+    <p>1. 项目背景与研究意义</p>
+    <p>2. 国内外研究现状</p>
+    <p>3. 系统总体方案</p>
+    <p>4. Bimanual Task-aware Adapter 方法设计</p>
+    <p>5. 实验设计与评价指标</p>
+    <p>6. 创新点总结</p>
+    <p>7. 结论与后续工作</p>
+  </div>
+
+  <h2>论文依据梳理表</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 18%">论文</th>
+        <th style="width: 41%">与本项目最相关内容</th>
+        <th>对 BTA/系统设计的支撑</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>GR00T N1</td>
+        <td>提出面向人形机器人的 VLA 基础模型，VLM 负责视觉语言理解，Diffusion Transformer/flow matching 动作模块生成动作；支持单臂、双臂和人形 embodiment；使用 embodiment-specific state/action encoder 与 decoder；后训练阶段支持面向单一机器人本体的数据适配。</td>
+        <td>支撑“基于 GR00T 类 VLA 基础模型做后训练，而不是从零训练”；支撑 G1 平台需要状态/动作适配器；支撑语言指令、action chunk 和真机部署流程。</td>
+      </tr>
+      <tr>
+        <td>TinyVLA</td>
+        <td>讨论 OpenVLA 等大 VLA 的推理延迟和大规模数据依赖问题；采用小型 VLM、LoRA 参数高效微调和 diffusion policy decoder 输出连续动作；在单臂和双臂真机实验中验证轻量 VLA 路线。</td>
+        <td>支撑“轻量化适配而非重新训练大模型”；支撑 BTA 作为附加适配层，以冻结/LoRA/小型动作头方式部署；支撑采用连续扩散动作头降低延迟。</td>
+      </tr>
+      <tr>
+        <td>ACT/ALOHA</td>
+        <td>通过双臂遥操作采集示教；ACT 预测未来 k 步动作序列而不是单步动作，以降低有效任务时域；通过 temporal ensemble 平滑重叠 action chunk；动作空间包含两臂目标关节位置。</td>
+        <td>直接支撑 action chunk；支撑双臂模仿学习数据采集与低层连续动作生成；适合抓取、倾倒、放置等长时程动作。</td>
+      </tr>
+      <tr>
+        <td>Rethinking Bimanual Robotic Manipulation</td>
+        <td>将双臂任务分为 coordinated 和 uncoordinated；指出集成式控制会放大动作空间并造成左右臂学习干扰；提出独立单臂模型与 selective interaction module。</td>
+        <td>强支撑左右臂动作子空间划分和选择性交互；任务角色 token 不是原论文方法，本文将其作为受双臂职责解耦思想启发的工程化编码。</td>
+      </tr>
+      <tr>
+        <td>YOTO</td>
+        <td>从单次第三人称双目人手视频提取双手轨迹；将连续手部运动离散成关键帧；记录双手运动顺序作为 motion mask；用 motion mask 判断双臂同步/异步运动并重组动作空间。</td>
+        <td>支撑关键帧、motion mask、双臂动作模式和示教扩展；支撑 BTA 中的阶段/角色 mask 和异步双臂动作子空间重组。</td>
+      </tr>
+      <tr>
+        <td>Transformer-based dual-arm imitation learning</td>
+        <td>指出双臂高维状态会造成干扰，例如一只手臂执行任务时另一只手臂状态可能成为无关输入；Transformer 自注意力可关注关键感觉输入并抑制干扰。</td>
+        <td>支撑“双臂高维状态/动作耦合带来干扰”的问题定义；支撑 BTA 通过角色 token、mask loss 和选择性交互减少无关手臂影响。</td>
+      </tr>
+      <tr>
+        <td>DAISS</td>
+        <td>提出 phase-aware imitation learning；将非对称双臂流程划分为阶段；将 phase embedding 注入 Transformer decoder；使用 dynamic mask loss 对不同阶段施加不同权重；双解耦动作头输出非对称双臂轨迹。</td>
+        <td>直接支撑阶段感知 prompt/phase token 与 role-aware masked loss；支撑饮品任务中的取杯、取瓶、对准、倾倒、放置等阶段切换和安全执行。</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <h2>1. 项目背景与研究意义</h2>
+  <p>随着人形机器人和双臂机器人硬件能力的提升，机器人从单一抓取、搬运逐步走向面向人的服务任务。饮品服务是家庭、办公室、展厅和康养场景中较有代表性的任务：机器人需要理解用户指令，识别饮品、杯子和杯垫的位置，完成抓取、递送、倾倒和摆放等连续操作。与普通单臂抓取相比，饮品服务对双臂协作提出了更高要求。例如，在本项目设定中，机器人需要完成饮料抓取和递送，并进一步完成“右臂抓取营养快线并倒入杯子三分之一，左臂抓取杯子并放置到杯垫上”的任务。该任务同时包含单臂主导、双臂协同、精细倾倒和安全放置等环节，是验证双臂服务机器人综合能力的合适载体。</p>
+  <p>本项目采用智元 G1 双臂机器人作为硬件平台，围绕 GR00T/VLA 类视觉-语言-动作基础模型构建饮品服务系统。VLA 模型能够将视觉观察、语言指令和机器人状态映射到动作，为机器人提供较强的语义理解和动作生成基础。但在真实双臂任务中，仅依赖通用 VLA 后训练仍存在不足：第一，左右臂在不同阶段承担的角色不同，模型容易出现角色混淆；第二，双臂动作维度较高，直接联合预测会放大动作空间，导致学习困难；第三，某些阶段只有一只手臂主导，另一只手臂应保持或避让，统一损失会造成左右臂学习不均衡；第四，饮品倾倒任务中“抓取、对准、倾倒、停止、放置”的阶段切换明显，若模型缺少阶段感知，容易出现提前倾倒、过量倾倒或放置不稳。</p>
+  <p>为解决上述问题，本文设计 Bimanual Task-aware Adapter，简称 BTA，即双臂任务感知适配模块。BTA 不是重新训练一个大规模机器人基础模型，而是在 GR00T 类 VLA 基础模型的后训练和真机部署中，引入任务角色 token、阶段感知提示、左右臂动作子空间划分和角色感知 mask loss。其目标是在保持基础 VLA 泛化能力的同时，使模型更清楚地知道“哪只手在当前阶段负责什么”“哪只手应运动或保持”“哪些动作维度需要重点学习”，从而提升双臂饮品服务任务的成功率、稳定性和部署效率。</p>
+
+  <h2>2. 国内外研究现状</h2>
+  <h3>2.1 视觉-语言-动作模型研究现状</h3>
+  <p>GR00T N1 是面向通用人形机器人的 VLA 基础模型。该模型采用双系统架构：视觉语言模块负责处理图像和语言指令，动作模块采用 Diffusion Transformer 和 flow matching 生成连续机器人动作。GR00T N1 的一个重要特点是支持多种 embodiment，包括单臂、双臂和人形机器人，并通过 embodiment-specific state/action encoder 和 decoder 处理不同机器人状态和动作维度。这一点对本项目很关键，因为智元 G1 的关节结构、末端执行器和传感器配置与论文中的平台并不完全相同，必须通过本体适配层将 G1 的状态和动作映射到基础模型可处理的表示空间。</p>
+  <p>GR00T N1 还强调后训练流程。论文中在 post-training 阶段对单一 embodiment 的数据进行微调，并冻结语言组件，重点微调其余模型部分；在算力受限场景下，也讨论了只调 action/state encoder、action decoder 和 DiT 的可行性。这为本项目提供了现实路径：不从零训练基础 VLA，而是在已有 VLA 模型之上，通过少量 G1 饮品服务示教数据进行后训练，并插入轻量 BTA 适配模块。</p>
+  <p>TinyVLA 则从轻量化角度讨论 VLA 部署问题。该论文指出，OpenVLA 等较大 VLA 模型推理慢，并且依赖大规模机器人数据预训练；TinyVLA 使用更小的 VLM，冻结预训练部分，通过 LoRA 做参数高效微调，并接入 diffusion policy decoder 输出连续动作。论文还指出，其速度提升不仅来自更小的 VLM，也来自避免自回归动作 token 生成。对本项目而言，这说明饮品服务系统应优先采用轻量适配和连续动作头，而不是重新训练或完整微调大模型。BTA 因此被设计为可插拔模块，可与 GR00T 类架构、TinyVLA 类轻量动作头或扩散策略头结合。</p>
+
+  <h3>2.2 双臂机器人模仿学习研究现状</h3>
+  <p>ACT/ALOHA 是双臂模仿学习的重要基础。ALOHA 通过双臂遥操作采集真实示教，ACT 则使用 Action Chunking with Transformers 预测未来 k 步动作序列，而不是每次只预测单步动作。该方法降低了长时程任务的有效时域，并通过 temporal ensemble 对重叠动作 chunk 进行平滑。论文中的双臂动作空间是两只机械臂目标关节位置的组合，适合精细、接触丰富的双臂操作。</p>
+  <p>饮品服务任务同样具有长时程和阶段性特点。抓取瓶子、抓杯子、移动到杯口上方、倾倒至三分之一、停止倾倒、放置杯子，这些动作若逐步单点预测，容易累积误差；若以 action chunk 输出，则可以提升动作连续性和局部规划能力。因此，本项目在 BTA 之下保留 action chunk 机制，将每个时刻的动作表示为未来 H 步左右臂动作序列，并在执行端采用重叠 chunk 平滑策略。</p>
+
+  <h3>2.3 双臂任务解耦与阶段感知方法研究现状</h3>
+  <p>双臂任务并不总是需要强协同。Rethinking Bimanual Robotic Manipulation 将双臂任务区分为 coordinated 和 uncoordinated 两类，指出集成式控制框架将双臂状态和动作直接拼接，可能扩大动作空间并增加学习难度。该论文提出为每只手臂分配独立模型，使其只处理当前手臂输入并输出当前手臂动作，同时通过 selective interaction module 对另一只手臂的状态特征进行缩放和对齐，从而兼顾非协同任务和协同任务。这为 BTA 中的左右臂动作子空间划分提供了直接依据。</p>
+  <p>YOTO 方法关注从单次人手视频中学习双臂操作。该论文将连续双手轨迹离散为关键帧，并记录双手运动顺序作为 motion mask，用于区分双臂同步和异步运动。论文还利用 motion mask 重组动作空间，减少单臂等待造成的冗余位姿。该思想对本项目中的“左臂持杯、右臂倾倒”非常重要：在倾倒阶段，右臂是主导臂，左臂主要保持杯子稳定；在放置阶段，左臂变成主导臂，右臂应保持或撤回。BTA 的 role-aware mask loss 正是借鉴这种 motion mask 思想，对不同阶段的左右臂动作误差施加不同权重。</p>
+  <p>Transformer-based dual-arm imitation learning 从高维双臂状态干扰角度说明了问题。论文指出，在双臂模仿学习中，增加另一只机械臂会显著提高状态维度，并可能造成干扰；例如右臂执行抓取时，左臂状态可能不是当前策略所需的关键信息。其 Transformer 自注意力机制能够根据输入动态关注重要状态，抑制无关信息。该结论支撑了 BTA 的问题设定：双臂饮品服务需要显式减少无关手臂状态和动作维度对当前阶段学习的干扰。</p>
+  <p>DAISS 则为阶段感知和动态损失提供了直接依据。该论文将非对称双臂介入任务拆分为多个阶段，使用 phase-aware module 监测多模态状态，生成 phase embedding 并注入 Transformer decoder；训练中通过 dynamic mask loss 对不同阶段赋予不同权重，从而平衡快速宏观移动和精细微操作。虽然该论文面向医疗超声介入，与饮品服务场景不同，但其“阶段感知、非对称双臂、动态 mask loss”的思想可工程化迁移到本项目。</p>
+
+  <h2>3. 系统总体方案</h2>
+  <h3>3.1 任务场景定义</h3>
+  <p>本项目面向研究生技术竞赛，构建基于 VLA 的双臂机器人饮品服务系统。任务分为三个层级：第一层是基础饮品抓取与递送，机器人根据用户指令识别饮料瓶或杯子，并完成抓取和递送；第二层是双臂协同倾倒，右臂抓取营养快线瓶，左臂抓取杯子或稳定杯子，右臂将饮品倒入杯子约三分之一；第三层是服务摆放，左臂将杯子放置到杯垫上，右臂将瓶子放回安全位置或保持避让。</p>
+  <p>该任务中的角色关系会动态变化。抓瓶阶段右臂主导、左臂可空闲或避让；抓杯阶段左臂主导；倾倒阶段右臂控制瓶口位置和倾角，左臂负责稳定杯子；放置阶段左臂主导完成杯子移动和释放，右臂保持安全距离。这种阶段性和角色变化正是 BTA 的设计对象。</p>
+
+  <h3>3.2 系统硬件平台</h3>
+  <p>硬件平台采用智元 G1 双臂机器人。系统建议配置包括：机器人本体双臂关节状态读取与控制接口，左右末端夹爪，头部或胸部全局 RGB-D 相机，左右腕部近距离相机，桌面工作区，杯子、杯垫、营养快线瓶及辅助定位标记。全局相机用于识别任务物体和整体布局，腕部相机用于抓取、对准杯口和放置杯子时的局部精细感知。若条件允许，可增加杯口区域的深度估计或液面检测模块，用于判断是否达到三分之一容量。</p>
+  <p>控制层采用分层架构。上层 VLA/BTA 模型输出未来 H 步动作 chunk，包括左右臂末端位姿增量、夹爪开合状态或关节目标。中层进行动作限幅、碰撞检测、速度平滑和工作空间约束。底层由 G1 控制器执行关节轨迹或末端轨迹跟踪。</p>
+
+  <h3>3.3 数据采集方案</h3>
+  <p>数据采集采用遥操作示教与结构化标注结合的方式。每条示教轨迹包含多视角图像、左右臂关节状态、末端位姿、夹爪状态、语言指令、阶段标签、角色标签、动作 mask 和成功/失败标签。阶段标签可定义为：<span class="mono">P1_识别与接近</span>、<span class="mono">P2_右臂抓瓶</span>、<span class="mono">P3_左臂抓杯</span>、<span class="mono">P4_双臂对准</span>、<span class="mono">P5_右臂倾倒左臂持稳</span>、<span class="mono">P6_停止倾倒</span>、<span class="mono">P7_左臂放杯垫</span>、<span class="mono">P8_撤回与复位</span>。角色标签可定义为右臂 <span class="mono">pourer/grasp_bottle/retract/idle</span>，左臂 <span class="mono">holder/grasp_cup/place_cup/idle</span>。</p>
+  <p>动作 mask 用于标识每个阶段左右臂是否应主动运动。例如倾倒阶段右臂 mask 较高，左臂位置保持和姿态稳定权重较高；右臂撤回阶段左臂可保持杯子；放置阶段左臂动作权重提高，右臂避让权重提高。数据集还应记录失败类型，例如抓取失败、瓶口未对准、洒漏、倒入过量、杯子未放准、双臂距离过近等，为后续分析提供依据。</p>
+
+  <h3>3.4 模型训练与部署流程</h3>
+  <p>训练流程分为四步。第一步，选取 GR00T 类 VLA 或轻量 VLA 作为初始化模型，保留其视觉语言理解和基础动作先验。第二步，建立 G1 embodiment adapter，将 G1 的状态和动作维度映射到模型内部表示，动作向量按左臂和右臂语义字段明确拆分。第三步，插入 BTA 模块，加入角色 token、阶段 prompt、左右臂动作子空间和 role-aware mask loss，在饮品服务示教数据上进行后训练。第四步，在仿真或离线回放中筛选模型，再上真机进行低速、安全边界内的试运行。</p>
+  <p>部署时，用户输入自然语言指令，例如“请倒三分之一杯营养快线并放到杯垫上”。系统先通过视觉模块识别瓶子、杯子、杯垫位置；然后根据任务进度生成阶段 prompt 和角色 token；VLA 动作模块输出 action chunk；BTA 根据当前阶段对左右臂动作子空间和交互权重进行调制；安全执行模块检查动作是否超过工作空间、速度、倾角和双臂距离约束，最终发送给 G1 控制器执行。</p>
+
+  <h2>4. Bimanual Task-aware Adapter 方法设计</h2>
+  <h3>4.1 任务角色 token</h3>
+  <p>BTA 的第一项设计是任务角色 token。其核心思想是把左右臂在当前阶段的职责显式写入模型输入，使 VLA 不仅看到“倒饮料”这一总体指令，还能看到“右臂负责倾倒、左臂负责持稳”的角色分工。示例 token 如下：</p>
+  <p class="equation">[TASK=drink_service] [PHASE=pour_to_one_third] [LEFT_ROLE=cup_holder] [RIGHT_ROLE=bottle_pourer] [LEFT_MODE=stabilize] [RIGHT_MODE=active]</p>
+  <p>这种设计借鉴了 GR00T 的语言条件化输入形式，也受双臂解耦交互框架中任务分类和单臂职责解耦思想启发。需要说明的是，任务角色 token 并非上述论文直接提出的方法，而是本文面向 G1 饮品任务进行的工程化设计。其作用是减少模型对左右臂职责的隐式推断压力，尤其适用于少量示教数据后训练场景。</p>
+
+  <h3>4.2 阶段感知 prompt</h3>
+  <p>BTA 的第二项设计是阶段感知 prompt。饮品服务不是单一动作，而是由多个阶段组成。不同阶段对速度、精度和安全性的要求不同：接近和抓取阶段可以较快，杯口对准和倾倒阶段必须更慢、更精确，放置阶段需要控制杯子姿态并避免碰撞。受 DAISS 的 phase-aware imitation learning 启发，本文将阶段状态编码为 prompt 或 embedding，并输入到动作生成模块。</p>
+  <p>阶段切换可由规则和模型共同判断。抓取阶段可由夹爪闭合与物体位姿稳定触发；对准阶段可由瓶口与杯口相对位置满足阈值触发；倾倒停止可由液面高度、倾倒时间和瓶身角度共同判断；放置完成可由杯底与杯垫中心误差和夹爪释放状态判断。阶段 prompt 的目标不是替代 VLA 推理，而是为后训练提供清晰的时间结构，降低模型学习长时程阶段切换的难度。</p>
+
+  <h3>4.3 左右臂动作子空间划分</h3>
+  <p>设当前时刻观测为 <em>o</em><sub>t</sub>，语言和阶段输入为 <em>l</em><sub>t</sub>，基础动作模型输出未来 H 步动作 chunk：</p>
+  <div class="equation"><em>A</em><sub>t</sub> = [<em>a</em><sub>t</sub>, <em>a</em><sub>t+1</sub>, ..., <em>a</em><sub>t+H-1</sub>]</div>
+  <p>其中每个动作拆分为：</p>
+  <div class="equation"><em>a</em><sub>t</sub> = [<em>a</em><sub>t</sub><sup>L</sup>, <em>a</em><sub>t</sub><sup>R</sup>]</div>
+  <p><em>a</em><sub>t</sub><sup>L</sup> 表示左臂末端位置、姿态和夹爪动作，<em>a</em><sub>t</sub><sup>R</sup> 表示右臂对应动作。传统集成式控制直接联合预测 [<em>a</em><sup>L</sup>, <em>a</em><sup>R</sup>]，容易扩大动作搜索空间。BTA 将其划分为左右臂动作子空间，并根据阶段和角色决定是否共享信息。对于非协同阶段，如右臂单独抓瓶，模型主要优化右臂抓取动作，左臂维持安全姿态；对于协同阶段，如倾倒，模型允许左右臂状态交互，但交互强度由阶段和角色控制。</p>
+  <p>该设计与双臂解耦交互框架一致：先让每只手臂学习自己的动作，再通过选择性交互感知另一只手臂。与 YOTO 的 motion mask 思想也一致：双臂同步和异步阶段应采用不同动作组织方式。工程实现上，可采用共享 VLA backbone 加左右臂小型动作头，也可采用一个动作头输出完整动作后再通过 mask 和分臂 loss 进行约束。</p>
+
+  <h3>4.4 角色感知 mask loss</h3>
+  <p>BTA 的第四项设计是 role-aware masked loss。设模型预测动作为 <em>â</em><sub>t,h</sub><sup>L</sup>、<em>â</em><sub>t,h</sub><sup>R</sup>，示教动作为 <em>a</em><sub>t,h</sub><sup>L</sup>、<em>a</em><sub>t,h</sub><sup>R</sup>。对未来第 h 步动作，定义左臂和右臂 mask：<em>m</em><sub>t,h</sub><sup>L</sup>、<em>m</em><sub>t,h</sub><sup>R</sup>，并定义阶段权重 <em>w</em><sub>p</sub> 和角色权重 <em>w</em><sub>r</sub>。训练损失可写为：</p>
+  <div class="equation">
+    <em>L</em> = Σ<sub>t,h</sub> [ <em>w</em><sub>t,h</sub><sup>L</sup><em>m</em><sub>t,h</sub><sup>L</sup> ||<em>â</em><sub>t,h</sub><sup>L</sup> - <em>a</em><sub>t,h</sub><sup>L</sup>||<sub>1</sub>
+    + <em>w</em><sub>t,h</sub><sup>R</sup><em>m</em><sub>t,h</sub><sup>R</sup> ||<em>â</em><sub>t,h</sub><sup>R</sup> - <em>a</em><sub>t,h</sub><sup>R</sup>||<sub>1</sub> ]
+  </div>
+  <p>其中 <em>w</em> 根据阶段和角色设置。例如在倾倒阶段，右臂瓶口位置、倾角和角速度权重提高；左臂杯子位置和姿态稳定权重提高，但左臂大范围移动权重降低。在放置阶段，左臂轨迹和释放动作权重提高，右臂避让与保持动作权重提高。该设计直接借鉴 DAISS 的 dynamic mask loss 和 YOTO 的 motion mask，同时结合双臂解耦交互框架的分臂 loss 思想。这里的 role-aware masked loss 是本文基于相关思想进行的工程化设计，不直接等同于任一原论文方法。</p>
+
+  <h3>4.5 真机安全执行策略</h3>
+  <p>饮品倾倒涉及液体和人机共处，必须加入安全执行策略。第一，工作空间限幅：左右臂末端不得越过桌面安全边界，瓶口不得碰撞杯沿。第二，双臂距离约束：实时计算左右末端和前臂包围盒距离，低于阈值时减速或停止。第三，倾倒角速度限制：右臂倾倒角度逐步增加，避免突然大角度导致洒漏。第四，液面终止策略：通过视觉估计液面高度，达到杯子高度约三分之一时停止倾倒并回正瓶身。第五，异常回退：若检测到瓶子滑移、杯子倾斜、液体洒出或视觉目标丢失，立即进入安全保持或撤回阶段。</p>
+  <p>这些安全策略与 DAISS 中工作空间约束、碰撞避免和阶段化执行思想一致，但针对饮品服务进行了任务化改造。</p>
+
+  <h2>5. 实验设计与评价指标</h2>
+  <h3>5.1 数据集设计</h3>
+  <p>数据集建议分为四类。第一类是单臂基础操作，包括右臂抓瓶、左臂抓杯、左臂放杯垫。第二类是双臂协同操作，包括左臂持杯、右臂对准杯口、倾倒和停止。第三类是完整任务轨迹，从用户指令到饮品放置完成。第四类是扰动与泛化数据，包括瓶子不同初始位置、杯子不同位置、杯垫不同位置、光照变化和轻微遮挡。每条数据都应包含阶段标签、角色标签和动作 mask，以支持 BTA 训练和消融实验。</p>
+
+  <h3>5.2 对比实验</h3>
+  <p>对比方法包括：无 BTA 的 GR00T/VLA 后训练模型、ACT 风格双臂 action chunk 模型、集成式双臂动作预测模型、仅左右臂解耦但无阶段感知的模型，以及完整 BTA 模型。通过这些对比，可以验证 BTA 是否真正提升双臂饮品服务任务，而不是仅依赖基础模型能力。</p>
+
+  <h3>5.3 消融实验</h3>
+  <p>消融实验包括四组。第一，去掉任务角色 token，观察左右臂角色混淆是否增加。第二，去掉阶段感知 prompt，观察倾倒提前、停止不及时、放置阶段失败是否增加。第三，去掉左右臂动作子空间划分，观察训练收敛速度、左右臂轨迹误差和动作抖动。第四，去掉 role-aware masked loss，观察单臂主导阶段是否出现辅助臂过度运动或主导臂学习不足。</p>
+
+  <h3>5.4 评价指标</h3>
+  <p>核心指标包括任务成功率、三分之一液面误差、左右臂末端轨迹误差、瓶口与杯口对准误差、洒漏率、碰撞/近碰撞次数、杯垫放置误差、平均推理延迟和单次任务完成时间。失败类型应分类统计：识别失败、抓取失败、对准失败、倒入不足、倒入过量、洒漏、杯子放置偏差、双臂干涉和阶段切换错误。对于竞赛展示，建议同时提供定量表格和典型成功/失败视频分析。</p>
+
+  <h2>6. 创新点总结</h2>
+  <p>本项目的创新点不在于重新提出一个大规模 VLA 基础模型，而在于面向智元 G1 双臂饮品服务任务，设计轻量级、可部署的双臂任务感知适配模块 BTA。</p>
+  <ul>
+    <li>提出任务角色 token，将左右臂在不同阶段的职责显式输入模型，缓解角色混淆。</li>
+    <li>引入阶段感知 prompt，将饮品服务拆分为抓取、对准、倾倒、停止、放置等阶段，提升长时程任务的可控性。</li>
+    <li>进行左右臂动作子空间划分，在单臂主导阶段减少无关动作维度干扰，在协同阶段保留必要交互。</li>
+    <li>设计 role-aware masked loss，根据角色、阶段和运动状态动态调整左右臂训练权重，改善左右臂学习不均衡。</li>
+    <li>结合轻量后训练和真机安全执行策略，使系统更适合研究生技术竞赛中的真实机器人展示。</li>
+  </ul>
+
+  <h2>7. 结论与后续工作</h2>
+  <p>本文围绕“基于 GR00T/VLA 的双臂机器人饮品服务系统”提出了一套技术报告初稿。系统以智元 G1 双臂机器人为平台，以 GR00T 类 VLA 基础模型为核心，结合 ACT 的 action chunk、TinyVLA 的轻量适配思想、双臂解耦交互框架、YOTO 的 motion mask、Transformer 双臂模仿学习中的注意力抑制干扰和 DAISS 的阶段感知 mask loss，设计 Bimanual Task-aware Adapter。BTA 将任务角色、执行阶段、左右臂动作子空间和损失权重显式化，面向饮品抓取、递送、倾倒三分之一和杯垫放置任务提供更清晰的工程实现路径。</p>
+  <p>后续工作可从三个方向展开。第一，完善真机数据采集与标注工具，降低角色和阶段标注成本。第二，引入更稳定的液面高度估计和接触状态检测，提高倾倒量控制精度。第三，将 BTA 扩展到更多服务任务，如倒水、递药、整理餐具和多物体摆放，验证其在不同双臂非对称任务中的泛化能力。</p>
+
+  <h2>参考论文</h2>
+  <ul class="note">
+    <li>GR00T N1: An Open Foundation Model for Generalist Humanoid Robots.</li>
+    <li>TinyVLA: Towards Fast, Data-Efficient Vision-Language-Action Models for Robotic Manipulation.</li>
+    <li>Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware.</li>
+    <li>Rethinking Bimanual Robotic Manipulation: Learning with Decoupled Interaction Framework.</li>
+    <li>You Only Teach Once: Learn One-Shot Bimanual Robotic Manipulation from Video Demonstrations.</li>
+    <li>Transformer-based deep imitation learning for dual-arm robot manipulation.</li>
+    <li>DAISS: Phase-Aware Imitation Learning for Dual-Arm Robotic Ultrasound-Guided Interventions.</li>
+  </ul>
+</main>
+</body>
+</html>
