@@ -1,103 +1,374 @@
-\documentclass[UTF8,a4paper,11pt]{ctexart}
+\documentclass[UTF8,a4paper,zihao=5,scheme=chinese]{ctexart}
+
+\usepackage{iftex}
+\ifPDFTeX
+\else
+  \usepackage{fontspec}
+  \IfFontExistsTF{Times New Roman}
+    {\setmainfont{Times New Roman}}
+    {\setmainfont{Liberation Serif}}
+  \IfFontExistsTF{SimSun}
+    {\setCJKmainfont{SimSun}}
+    {\setCJKmainfont{Noto Serif CJK SC}}
+\fi
+
 \usepackage{geometry}
 \usepackage{amsmath,amssymb}
-\usepackage{booktabs,longtable,array}
-\usepackage{hyperref}
-\usepackage{xcolor}
+\usepackage{booktabs,array,tabularx}
+\usepackage{caption}
 \usepackage{enumitem}
-\geometry{left=2.2cm,right=2.2cm,top=2.4cm,bottom=2.4cm}
-\setlist{nosep}
-\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,citecolor=black}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{fancyhdr}
 
-\title{\bfseries 基于双臂任务感知适配的视觉-语言-动作机器人饮品服务系统}
-\author{研究生技术竞赛技术报告初稿}
-\date{核心方法：Bimanual Task-aware Adapter（BTA）}
+\geometry{left=2.5cm,right=2.5cm,top=2.6cm,bottom=2.6cm}
+\setlength{\parindent}{2em}
+\setlength{\parskip}{0pt}
+\linespread{1.5}
+\setlist{nosep,leftmargin=2em}
+\captionsetup{font=small,labelsep=quad}
+\hypersetup{colorlinks=true,linkcolor=black,urlcolor=blue,citecolor=black}
+\numberwithin{figure}{section}
+\numberwithin{table}{section}
+\renewcommand{\thefigure}{\arabic{section}-\arabic{figure}}
+\renewcommand{\thetable}{\arabic{section}-\arabic{table}}
+\pagestyle{fancy}
+\fancyhf{}
+\fancyhead[C]{\zihao{5}第二十一届中国研究生电子设计竞赛\\面向饮品服务场景的双臂任务感知 VLA 服务机器人系统}
+\fancyfoot[C]{\thepage}
+\setlength{\headheight}{26pt}
+
+\ctexset{
+  section={
+    format={\zihao{-2}\bfseries\centering},
+    name={第,章},
+    number=\arabic{section},
+    aftername={},
+    beforeskip=1.2ex,
+    afterskip=1.0ex
+  },
+  subsection={
+    format={\zihao{-3}\bfseries},
+    name={},
+    number=\arabic{section}.\arabic{subsection},
+    aftername=\quad,
+    beforeskip=0.8ex,
+    afterskip=0.4ex
+  },
+  subsubsection={
+    format={\zihao{-4}\bfseries},
+    name={},
+    number=\arabic{section}.\arabic{subsection}.\arabic{subsubsection},
+    aftername=\quad,
+    beforeskip=0.6ex,
+    afterskip=0.2ex
+  }
+}
+
+\renewcommand{\figurename}{图}
+\renewcommand{\tablename}{表}
+\newcommand{\placeholderfigure}[1]{%
+  \fbox{%
+    \parbox[c][5.2cm][c]{0.85\linewidth}{%
+      \centering #1%
+    }%
+  }%
+}
+
+\title{\zihao{3}\bfseries 面向饮品服务场景的双臂任务感知 VLA 服务机器人系统}
+\author{\zihao{5}作者：待补充}
+\date{}
 
 \begin{document}
+
 \maketitle
+\thispagestyle{empty}
+\clearpage
 
 \begin{abstract}
-面向研究生技术竞赛中的双臂机器人饮品服务任务，本文设计一套基于 GR00T/VLA 的视觉-语言-动作机器人系统。系统以智元 G1 双臂机器人为硬件平台，面向饮料抓取、递送、右臂抓取营养快线并倒入杯子三分之一、左臂抓取杯子并放置到杯垫等任务，提出双臂任务感知适配模块 Bimanual Task-aware Adapter（BTA）。BTA 在 GR00T 类 VLA 基础模型的后训练和真机部署过程中，引入任务角色 token、阶段感知提示、左右臂动作子空间划分和角色感知 mask loss，用于缓解双臂任务中左右臂角色不清、动作维度耦合、左右臂学习不均衡和协同阶段切换困难等问题。
+面向家庭、办公与展示等服务场景，双臂服务机器人需要在开放桌面环境中根据语言指令完成目标识别、物体抓取、递送、倒水和摆放等连续操作。视觉-语言-动作（Vision-Language-Action, VLA）模型通过联合建模视觉观测、语言指令与机器人动作，为服务机器人复杂任务学习提供了新的技术路径。通用 VLA 模型的任务后训练路线能够利用预训练模型的多模态理解能力，并通过少量场景示教数据适配真实机器人平台。然而，双臂饮品服务同时包含右臂抓瓶、右臂对准并倾倒、左臂抓杯、左臂放杯垫以及双臂协同持稳等阶段。如果直接将左右臂和夹爪动作拼接为整体 action chunk 进行模仿学习，整体损失下降并不能充分说明左右臂均已学习稳定，也难以判断失败来自右臂抓取、倾倒控制、左臂抓杯还是双臂协同。针对上述问题，本文设计一种面向饮品服务场景的双臂任务感知 VLA 服务机器人系统，以智元 G1 双臂机器人为实验平台，构建饮品抓取、递送与协同倒水的真机任务流程。在方法上，本文引入轻量级双臂任务感知适配模块 Bimanual Task-aware Adapter（BTA），通过任务角色 token、阶段感知 prompt、左右臂动作子空间划分和角色感知加权损失，将原本整体式双臂动作监督转化为角色明确、阶段清晰、动作子空间可诊断的结构化学习问题。同时，训练策略采用“子动作学习、多任务联合、完整轨迹微调”的课程学习思想，并结合混合采样、子任务 replay 和 adapter 类参数高效微调降低技能覆盖风险。当前实验部分给出多饮品抓取与递送、双臂协同倒水两类真机验证方案及评价指标，为后续补充实测结果、消融分析和系统图像提供规范化论文框架。
 \end{abstract}
 
-\noindent\textbf{关键词：}视觉-语言-动作模型；双臂机器人；模仿学习；动作块；任务感知适配；饮品服务
+\noindent\textbf{关键词：}视觉-语言-动作模型；双臂机器人；任务感知适配；模仿学习；饮品服务
 
+\vspace{1em}
+\begin{center}
+  \textbf{Abstract}
+\end{center}
+\noindent
+Bimanual service robots are expected to execute long-horizon manipulation tasks in human-centered environments, including object recognition, language-conditioned grasping, handover, pouring, and placement. Vision-Language-Action (VLA) models provide a promising post-training route by mapping visual observations, language instructions, robot states, and continuous actions within a unified policy. Nevertheless, beverage service with a real bimanual robot contains heterogeneous phases, such as right-arm bottle grasping, right-arm alignment and pouring, left-arm cup grasping, left-arm cup placement, and coordinated bimanual stabilization. Treating all arm and gripper commands as a single action chunk may obscure arm roles, task phases, and leader-follower relations. A decreasing global imitation loss does not necessarily indicate that both arms are learned well, and it is hard to diagnose whether a failure comes from grasping, pouring, cup handling, or coordination. To address these issues, this paper presents a bimanual task-aware VLA service robot system for beverage service on the AgiBot G1 platform. We introduce a lightweight Bimanual Task-aware Adapter (BTA) for task-oriented post-training. BTA incorporates task-role tokens, phase-aware prompts, left/right arm action subspace decomposition, and a role-aware weighted loss, transforming holistic action imitation into a structured learning problem with explicit roles, clear phases, and diagnosable action subspaces. The training strategy follows a curriculum of sub-action learning, multi-task joint training, and full-trajectory fine-tuning, while using mixed sampling, sub-task replay, and adapter-style parameter-efficient tuning to reduce skill overwriting. The current paper specifies two real-robot experimental protocols and evaluation metrics without reporting fabricated numerical results, providing a structured basis for subsequent empirical validation.
+
+\noindent\textbf{Keywords:} Vision-Language-Action model; bimanual robot; task-aware adaptation; imitation learning; beverage service
+
+\clearpage
 \tableofcontents
 
-\section{项目背景与研究意义}
-随着人形机器人和双臂机器人硬件能力的提升，机器人从单一抓取、搬运逐步走向面向人的服务任务。饮品服务是家庭、办公室、展厅和康养场景中较有代表性的任务：机器人需要理解用户指令，识别饮品、杯子和杯垫的位置，完成抓取、递送、倾倒和摆放等连续操作。与普通单臂抓取相比，饮品服务对双臂协作提出了更高要求。
+\clearpage
+\section{作品难点与创新点设计}
 
-本项目采用智元 G1 双臂机器人作为硬件平台，围绕 GR00T/VLA 类视觉-语言-动作基础模型构建饮品服务系统。VLA 模型能够将视觉观察、语言指令和机器人状态映射到动作，为机器人提供较强的语义理解和动作生成基础。但在真实双臂任务中，仅依赖通用 VLA 后训练仍存在左右臂角色混淆、动作维度耦合、左右臂学习不均衡和阶段切换困难等问题。
+具身智能研究关注智能体在真实物理环境中通过感知、语言理解和动作执行完成目标任务。近年来，视觉-语言-动作模型将图像、自然语言和连续控制动作纳入统一建模框架，使机器人能够依据语言指令生成与环境状态相关的操作策略，为服务机器人从单一技能走向复合任务提供了重要基础\cite{rt1,rt2,openx,openvla,octo}。通用 VLA 模型进一步推动了“预训练模型+任务后训练+真机部署”的技术路线。与此同时，双臂机器人在人形平台和服务型平台中逐渐成为重要形态。相较于单臂系统，双臂机器人能够覆盖更大的操作空间，并在持稳、递送、倾倒和装配等任务中形成互补动作，因此更适合承担面向人的日常服务任务。
 
-为解决上述问题，本文设计 Bimanual Task-aware Adapter，简称 BTA。BTA 不是重新训练一个大规模机器人基础模型，而是在 GR00T 类 VLA 基础模型的后训练和真机部署中，引入任务角色 token、阶段感知提示、左右臂动作子空间划分和角色感知 mask loss。
+饮品服务任务具有较强的代表性。一方面，机器人需要根据语言指令识别饮品、杯子、杯垫等目标，并在多物体桌面环境中选择正确对象；另一方面，任务过程包含抓取、递送、倒水和摆放等连续阶段，对末端定位精度、夹爪开合时机、瓶口与杯口对准以及液体倾倒姿态均有要求。特别是在倒水任务中，右臂通常需要抓取饮品并控制倾角，左臂则需要抓取或稳定杯子并完成后续放置，任务同时涉及单臂主导与双臂协同。该类任务能够综合检验语言条件控制、长时序模仿学习、双臂动作分工和真机安全执行能力。
 
-\section{国内外研究现状}
-\subsection{视觉-语言-动作模型研究现状}
-GR00T N1 是面向通用人形机器人的 VLA 基础模型。该模型采用双系统架构：视觉语言模块负责处理图像和语言指令，动作模块采用 Diffusion Transformer 和 flow matching 生成连续机器人动作。GR00T N1 支持多种 embodiment，并通过 embodiment-specific state/action encoder 和 decoder 处理不同机器人状态和动作维度。这为智元 G1 的本体适配提供了依据。
+已有 VLA、模仿学习和双臂操作研究为该问题提供了基础。动作块预测能够缩短长时序模仿学习的有效决策长度，并已在双臂精细操作中得到验证\cite{act}；扩散策略和轻量化 VLA 模型进一步提升了连续动作生成和部署效率\cite{diffusionpolicy,tinyvla,rdt}。然而，真实双臂饮品服务仍面临若干不足。现有 VLA 模型在双臂后训练中通常将左臂、右臂、左夹爪和右夹爪动作拼接为统一 action chunk，并使用单一模仿学习损失进行监督。这种整体式学习方式虽然实现简单，但缺少对左右臂角色、任务阶段和主从关系的显式建模。在饮品服务中，右臂抓瓶、右臂倒水、左臂抓杯、左臂放杯垫和双臂协同持稳并不是完全相同的动作模式，若仅作为一个统一动作向量平均学习，容易掩盖不同子任务之间的控制差异。
 
-TinyVLA 从轻量化角度讨论 VLA 部署问题。该论文指出，OpenVLA 等较大 VLA 模型推理慢，并且依赖大规模机器人数据预训练；TinyVLA 使用更小的 VLM，冻结预训练部分，通过 LoRA 做参数高效微调，并接入 diffusion policy decoder 输出连续动作。这说明饮品服务系统应优先采用轻量适配和连续动作头，而不是重新训练或完整微调大模型。
+上述弊端会进一步带来四类工程问题。第一，左右臂学习可能不均衡，整体 loss 下降并不代表左臂抓杯、右臂抓瓶和双臂对准都已达到稳定水平。第二，单臂主导阶段容易受到另一只手无关动作或示教噪声干扰，导致非任务手臂误触发。第三，倒水任务包含接近、抓取、对准、倾倒、恢复和放置等长时序阶段，若模型缺少阶段感知，容易在倾倒开始、停止倾倒或放杯等关键切换点出现不稳定。第四，只观察总损失难以定位失败来源，不利于判断问题来自右臂抓取、右臂倾角控制、左臂持杯还是双臂空间配合。真机部署还受到工作空间边界、夹爪接触稳定性、观测延迟和安全约束等因素影响，因此需要一个兼顾可实现性、可诊断性和部署稳定性的任务适配方案。
 
-\subsection{双臂机器人模仿学习研究现状}
-ACT/ALOHA 是双臂模仿学习的重要基础。ALOHA 通过双臂遥操作采集真实示教，ACT 则使用 Action Chunking with Transformers 预测未来 $k$ 步动作序列，而不是每次只预测单步动作。该方法降低了长时程任务的有效时域，并通过 temporal ensemble 对重叠动作 chunk 进行平滑。
+针对上述问题，本文设计面向饮品服务场景的双臂任务感知 VLA 服务机器人系统。系统以预训练 VLA 策略模型为基础，通过饮品服务示教数据进行面向任务的后训练，并引入双臂任务感知适配模块 Bimanual Task-aware Adapter（BTA）。BTA 不改变 VLA 主干的基本输入输出形式，而是在语言与状态条件中显式加入任务角色和阶段信息，在动作预测端区分左右臂与夹爪动作子空间，并通过角色感知加权损失抑制非任务动作维度对训练的干扰。该设计旨在使模型不仅知道“要完成倒水任务”，还知道“当前处于哪个阶段、哪只手是主执行臂、哪只手是辅助臂、哪些动作维度应重点学习”，从而将整体式双臂动作模仿学习转化为任务角色明确、阶段信息清晰、动作子空间可诊断的结构化学习问题。
 
-\subsection{双臂任务解耦与阶段感知方法研究现状}
-Rethinking Bimanual Robotic Manipulation 将双臂任务区分为 coordinated 和 uncoordinated 两类，指出集成式控制框架将双臂状态和动作直接拼接，可能扩大动作空间并增加学习难度。YOTO 将连续双手轨迹离散为关键帧，并记录双手运动顺序作为 motion mask，用于区分双臂同步和异步运动。DAISS 将非对称双臂流程拆分为多个阶段，使用 phase embedding 和 dynamic mask loss 平衡快速移动和精细微操作。
+本文主要贡献如下：
+\begin{enumerate}
+  \item 构建面向饮品服务的双臂机器人真机任务流程，覆盖右臂抓取饮料瓶、右臂倒入约三分之一、左臂抓取杯子以及左臂将杯子放置到杯垫等典型服务操作。
+  \item 设计轻量级双臂任务感知适配模块 BTA，包括任务角色 token、阶段感知 prompt、左右臂动作子空间划分和角色感知加权损失，用于面向饮品服务任务适配预训练 VLA 策略模型。
+  \item 提出“子动作学习、多任务联合、完整轨迹微调”的训练策略，并结合混合采样、子任务 replay 和 adapter 类参数高效微调降低顺序训练导致的技能覆盖风险。
+  \item 给出基于智元 G1 双臂机器人的真机实验验证思路与评价指标，为后续分析饮品抓取、递送和协同倒水任务中的可行性、稳定性和失败类型提供实验框架。
+\end{enumerate}
 
-\section{系统总体方案}
-\subsection{任务场景定义}
-本项目任务包括基础饮品抓取与递送、双臂协同倾倒和服务摆放。机器人根据用户指令识别饮料瓶、杯子和杯垫，右臂抓取营养快线瓶，左臂抓取或稳定杯子，右臂将饮品倒入杯子约三分之一，左臂再将杯子放置到杯垫上。
+\clearpage
+\section{相关工作}
 
-\subsection{系统硬件平台}
-硬件平台采用智元 G1 双臂机器人。系统建议配置机器人本体双臂关节状态读取与控制接口、左右末端夹爪、头部或胸部全局 RGB-D 相机、左右腕部近距离相机、桌面工作区、杯子、杯垫和营养快线瓶。全局相机用于识别任务物体和整体布局，腕部相机用于抓取、对准杯口和放置杯子时的局部精细感知。
+\subsection{视觉-语言-动作模型与语言条件机器人控制}
 
-\subsection{数据采集方案}
-数据采集采用遥操作示教与结构化标注结合的方式。每条示教轨迹包含多视角图像、左右臂关节状态、末端位姿、夹爪状态、语言指令、阶段标签、角色标签、动作 mask 和成功/失败标签。阶段标签可定义为识别与接近、右臂抓瓶、左臂抓杯、双臂对准、右臂倾倒左臂持稳、停止倾倒、左臂放杯垫、撤回与复位。
+视觉-语言-动作模型通过将视觉观测、语言指令和机器人动作映射纳入同一策略网络，为语言条件机器人控制提供了端到端学习路径。RT-1 将大规模真实机器人数据用于多任务策略学习，证明了 Transformer 结构在机器人动作建模中的有效性\cite{rt1}。RT-2 进一步探索了视觉语言模型知识向机器人控制迁移的可能性\cite{rt2}。Open X-Embodiment 和 RT-X 通过跨机器人数据集训练提升策略泛化能力\cite{openx}，OpenVLA 和 Octo 则从开源通用策略模型角度推动了 VLA 模型的复现与迁移\cite{openvla,octo}。在语言条件模仿学习方面，BC-Z 和语言条件策略学习研究表明，自然语言能够作为任务条件提升机器人在多任务操作中的泛化能力\cite{bcz,lcil}；SayCan 将语言模型与可执行性评估结合，用于长时序任务规划\cite{saycan}。上述工作为本文采用预训练 VLA 策略模型进行饮品服务任务后训练提供了方法基础。
 
-\subsection{模型训练与部署流程}
-训练流程分为四步：选取 GR00T 类 VLA 或轻量 VLA 作为初始化模型；建立 G1 embodiment adapter；插入 BTA 模块并在饮品服务示教数据上进行后训练；在仿真或离线回放中筛选模型，再上真机进行低速、安全边界内的试运行。
+\subsection{动作块预测与机器人模仿学习}
 
-\section{Bimanual Task-aware Adapter 方法设计}
-\subsection{任务角色 token}
-BTA 将左右臂在当前阶段的职责显式写入模型输入，使 VLA 不仅看到“倒饮料”这一总体指令，还能看到“右臂负责倾倒、左臂负责持稳”的角色分工。例如：
+模仿学习是机器人操作策略学习的重要途径，但长时序任务中的误差累积和单步动作预测的不稳定性仍然突出。ACT 采用 Action Chunking with Transformers 预测未来一段动作序列，并通过时间集成平滑重叠动作块，降低了双臂精细操作中的有效预测长度；其 ALOHA 遥操作系统也为真实双臂示教数据采集提供了可复现平台\cite{act}。Diffusion Policy 将动作生成表述为条件扩散过程，在连续控制任务中表现出较好的多模态动作建模能力\cite{diffusionpolicy}；3D Diffusion Policy 和 Robotics Diffusion Transformer 进一步探索了三维表征和扩散 Transformer 在机器人操作中的应用\cite{dp3,rdt}。TinyVLA 从轻量化 VLA 和动作解码角度讨论了真实部署中的计算效率问题\cite{tinyvla}。本文在任务策略层采用动作块式连续动作输出，并在此基础上加入双臂角色约束，以适应饮品服务中的长时序阶段切换。
+
+\subsection{双臂机器人操作与任务解耦}
+
+双臂操作并非总是强协同过程。Rethinking Bimanual Robotic Manipulation 指出，部分双臂任务更接近单臂主导或选择性交互，若将双臂状态和动作简单拼接为统一动作空间，可能增加学习难度并削弱任务结构信息\cite{rethinkingbimanual}。YOTO 通过关键帧和 motion mask 表示双臂动作模式，为区分同步、异步和单臂动作提供了启发\cite{yoto}。IROS 2021 的 Transformer-based dual-arm imitation learning 相关研究表明，在高维双臂动作空间中引入注意力机制有助于模型关注关键观测与动作维度\cite{dualarmtransformer}。DAISS 作为近期预印本，从非对称双臂流程的阶段划分和动态 mask 损失角度讨论了双臂任务学习问题\cite{daiss}。受这些工作启发，本文不将饮品服务简单视为全程强协同任务，而是根据任务阶段显式区分左、右臂角色，并在训练损失中对任务相关动作维度赋予更明确的学习约束。
+
+\clearpage
+\section{方案论证与方法设计}
+
+\subsection{系统总体框架}
+
+本文系统由多视角感知、语言指令解析、VLA 策略网络、BTA 适配模块和真机安全执行层组成。输入包括全局相机图像、腕部相机图像、机器人左右臂关节状态、夹爪状态以及用户语言指令。VLA 策略网络根据观测和语言条件输出未来一段双臂动作块；BTA 模块在输入侧编码任务角色与阶段信息，在输出侧对左右臂动作子空间进行分解和约束；安全执行层对模型动作进行限幅、平滑和异常检测后发送至智元 G1 双臂机器人。
+
+\begin{figure}[htbp]
+  \centering
+  \placeholderfigure{此处预留系统总体框架图：包括多视角图像、语言指令、机器人状态、VLA 主干、BTA 模块、动作输出与真机执行。}
+  \caption{基于 VLA 的双臂机器人饮品服务系统总体框架}
+  \label{fig:system_framework}
+\end{figure}
+
+\subsection{任务定义}
+
+设机器人在时刻 $t$ 的观测为 $o_t=\{I_t^{g},I_t^{wL},I_t^{wR},s_t^L,s_t^R,g_t^L,g_t^R\}$，其中 $I_t^{g}$ 表示全局视角图像，$I_t^{wL}$ 和 $I_t^{wR}$ 分别表示左右腕部图像，$s_t^L$、$s_t^R$ 为左右臂状态，$g_t^L$、$g_t^R$ 为夹爪状态。语言指令记为 $x$，任务阶段记为 $p_t$，左右臂角色记为 $r_t^L$ 和 $r_t^R$。策略模型需要预测长度为 $H$ 的动作块：
 \[
-\text{[TASK=drink\_service] [PHASE=pour\_to\_one\_third] [LEFT\_ROLE=cup\_holder] [RIGHT\_ROLE=bottle\_pourer]}
+A_t = [a_t,a_{t+1},\ldots,a_{t+H-1}], \quad
+a_{t+h}=[a_{t+h}^{L},a_{t+h}^{R},a_{t+h}^{gL},a_{t+h}^{gR}].
 \]
-任务角色 token 并非上述论文直接提出的方法，而是本文面向 G1 饮品任务进行的工程化设计。
+其中 $a_{t+h}^{L}$ 和 $a_{t+h}^{R}$ 分别表示左右臂末端位姿增量或关节控制量，$a_{t+h}^{gL}$ 和 $a_{t+h}^{gR}$ 分别表示左右夹爪控制量。本文关注两类任务：一是多饮品抓取与递送，验证系统对不同饮品、位置和语言指令的响应能力；二是双臂协同倒水，要求右臂抓取饮品并倒入杯子约三分之一，左臂抓取杯子并放置到杯垫上。
 
-\subsection{阶段感知 prompt}
-饮品服务由多个阶段组成。不同阶段对速度、精度和安全性的要求不同：接近和抓取阶段可以较快，杯口对准和倾倒阶段必须更慢、更精确，放置阶段需要控制杯子姿态并避免碰撞。受 DAISS 的 phase-aware imitation learning 启发，本文将阶段状态编码为 prompt 或 embedding，并输入到动作生成模块。
+\subsection{VLA 后训练流程}
 
-\subsection{左右臂动作子空间划分}
-设当前时刻观测为 $o_t$，语言和阶段输入为 $l_t$，基础动作模型输出未来 $H$ 步动作 chunk：
-\[
-A_t = [a_t, a_{t+1}, \ldots, a_{t+H-1}]
-\]
-其中每个动作拆分为：
-\[
-a_t = [a_t^L, a_t^R]
-\]
-$a_t^L$ 表示左臂末端位置、姿态和夹爪动作，$a_t^R$ 表示右臂对应动作。BTA 将动作划分为左右臂动作子空间，并根据阶段和角色决定是否共享信息。
+后训练流程包括数据采集、轨迹标注、策略适配和真机部署四个步骤。首先，通过遥操作或示教采集饮品抓取、递送、倒水和放置轨迹，每条轨迹同步保存多视角图像、双臂状态、夹爪状态、语言指令和动作序列。其次，对轨迹进行阶段标注与角色标注，阶段可包括目标搜索、接近、抓取、抬升、递送、双臂对准、倾倒、停止倾倒、放杯和撤回。再次，在预训练 VLA 策略模型上进行参数高效或局部微调，训练目标为在给定观测、语言、阶段和角色条件下预测未来动作块。最后，在真机执行前通过离线回放、低速试运行和安全边界检查筛选模型。
 
-\subsection{角色感知 mask loss}
-设模型预测动作为 $\hat a_{t,h}^L$、$\hat a_{t,h}^R$，示教动作为 $a_{t,h}^L$、$a_{t,h}^R$。对未来第 $h$ 步动作，定义左臂和右臂 mask：$m_{t,h}^L$、$m_{t,h}^R$。训练损失可写为：
+\begin{figure}[htbp]
+  \centering
+  \placeholderfigure{此处预留饮品抓取与倒水任务流程图：包括多饮品识别、抓取、递送、双臂对准、倒水、停止倾倒、杯子放置与复位。}
+  \caption{饮品抓取与双臂协同倒水任务流程}
+  \label{fig:task_flow}
+\end{figure}
+
+\subsection{Bimanual Task-aware Adapter 设计}
+
+BTA 的设计目标不是重新训练一个新的大模型，而是在已有 VLA 后训练流程上加入轻量的任务结构约束。模块主要包含三部分：任务角色编码、阶段感知提示、左右臂动作子空间划分与角色感知加权损失。通过这三类信息，模型可以在保持原有视觉、语言和动作接口的基础上，获得更明确的双臂职责描述和更可解释的训练信号。
+
+\subsubsection{任务角色 token}
+
+BTA 将当前阶段左右臂职责显式编码为任务角色 token，并与语言指令共同输入策略模型。根据饮品服务流程，可设置 RIGHT\_GRASP\_BOTTLE、RIGHT\_ALIGN\_POUR、LEFT\_GRASP\_CUP、LEFT\_PLACE\_CUP、BIMANUAL\_HOLD\_POUR 等角色标签。例如，在倒水阶段可构造如下条件：
 \[
-L = \sum_{t,h} \left[
-w_{t,h}^L m_{t,h}^L \lVert \hat a_{t,h}^L - a_{t,h}^L \rVert_1
-+ w_{t,h}^R m_{t,h}^R \lVert \hat a_{t,h}^R - a_{t,h}^R \rVert_1
-\right].
+\text{[TASK=drink\_service] [PHASE=pour] [LEFT\_ROLE=cup\_holder] [RIGHT\_ROLE=bottle\_pourer]}.
 \]
-其中 $w$ 根据阶段和角色设置。例如在倾倒阶段，右臂瓶口位置、倾角和角速度权重提高；左臂杯子位置和姿态稳定权重提高，但左臂大范围移动权重降低。
+该表示使模型在同一总体指令下区分不同阶段的动作职责，避免将“倒水”粗略映射为双臂同步运动。对于单臂主导阶段，角色 token 可显式标识主执行臂和辅助臂；对于协同阶段，角色 token 则用于描述双臂之间的主从关系和空间配合目标。
+
+\subsubsection{阶段感知 prompt}
+
+饮品服务的不同阶段具有不同的控制目标。接近与抓取阶段强调目标定位和夹爪闭合时机，对准阶段强调瓶口与杯口的相对位置，倾倒阶段强调瓶身倾角和倒入量控制，恢复阶段强调停止倾倒后的姿态回正，放置阶段强调杯子姿态稳定和杯垫位置误差。BTA 使用阶段感知 prompt 或阶段 embedding 表示 $p_t$，将任务划分为接近、抓取、对准、倾倒、恢复和放置等阶段，并将阶段信息与语言特征、视觉特征和机器人状态融合。这样，模型在面对相同语言指令时也能根据当前阶段调整动作幅度、精度要求和夹爪控制时机。
+
+\subsubsection{左右臂动作子空间划分}
+
+为降低双臂高维动作空间带来的训练干扰，BTA 在动作预测端将双臂动作表示为左臂、右臂、左夹爪和右夹爪四个子空间：
+\[
+\hat A_t = [\hat A_t^L,\hat A_t^R,\hat A_t^{gL},\hat A_t^{gR}], \quad
+\hat A_t^L \in \mathbb{R}^{H \times d_L}, \quad
+\hat A_t^R \in \mathbb{R}^{H \times d_R}.
+\]
+其中夹爪子空间可根据实际控制接口表示为开合量、开合速度或离散开闭命令。在单臂主导阶段，任务相关手臂及其夹爪动作维度参与主要学习，非任务手臂以保持、避让或缓慢复位为主；在双臂协同阶段，左右臂动作同时参与预测，并通过阶段条件约束二者的相对空间关系。该划分不排除双臂信息交互，而是在损失统计和动作执行层面保留任务结构，便于后续定位具体失败环节。
+
+\subsubsection{角色感知加权损失}
+
+设 $\mathcal{L}_L$、$\mathcal{L}_R$、$\mathcal{L}_{gL}$ 和 $\mathcal{L}_{gR}$ 分别表示左臂、右臂、左夹爪和右夹爪动作误差，可采用 $L_1$ 或 Huber 损失计算。根据当前任务角色与阶段设定权重 $w_L,w_R,w_{gL},w_{gR}$，BTA 的训练目标可写为：
+\[
+\mathcal{L}_{\mathrm{BTA}} =
+w_L\mathcal{L}_L+
+w_R\mathcal{L}_R+
+w_{gL}\mathcal{L}_{gL}+
+w_{gR}\mathcal{L}_{gR}
++\lambda_s\mathcal{L}_{\mathrm{smooth}} .
+\]
+$\mathcal{L}_{\mathrm{smooth}}$ 为可选动作平滑约束，用于约束相邻动作块或相邻时刻动作变化，$\lambda_s$ 为其权重。该公式保持工程实现简洁：在抓瓶阶段提高右臂与右夹爪权重，在左臂抓杯阶段提高左臂与左夹爪权重，在双臂协同倒水阶段同时提高右臂瓶口位姿、倾角控制和左臂持杯稳定性的监督权重。通过分别记录四个子空间损失，训练过程不仅能观察总 loss，还能判断失败更可能来自右臂抓取、右臂倾倒、左臂抓杯、夹爪控制或双臂协同环节。
+
+\begin{figure}[htbp]
+  \centering
+  \placeholderfigure{此处预留 BTA 模块结构图：包括任务角色 token、阶段感知 prompt、左右臂动作子空间、角色感知加权损失与动作块解码。}
+  \caption{Bimanual Task-aware Adapter 模块结构}
+  \label{fig:bta_module}
+\end{figure}
+
+\clearpage
+\section{训练策略与软件流程}
+
+\subsection{基于任务流程先验的弱监督阶段标注}
+
+饮品服务任务具有明确的流程先验，因此本文不将阶段划分表述为完全自监督分割，而采用基于任务流程先验的弱监督阶段标注方式。具体而言，首先根据示教流程将完整轨迹按时间段或关键帧粗分为右臂抓饮料、右臂对准并倒水、左臂抓杯子、左臂放杯子和双臂协同倒水等子任务；随后结合夹爪开合状态、末端速度变化、瓶身倾斜角度、杯子位置变化和人工检查结果进行半自动校正。对于边界不明显的阶段，如对准到倾倒、倾倒到恢复，可保留短时间过渡片段并在训练中给予平滑约束，避免模型将阶段切换学习成突变动作。
+
+阶段标签与任务角色标签共同写入训练样本，形成 $(o_t,x,p_t,r_t,A_t)$ 形式的数据条目。其中 $p_t$ 描述当前处于接近、抓取、对准、倾倒、恢复或放置等阶段，$r_t$ 描述 LEFT\_GRASP\_CUP、RIGHT\_GRASP\_BOTTLE、BIMANUAL\_HOLD\_POUR 等任务角色。该标注方式依赖任务流程和少量校正，工程成本较低，也便于在真实采集数据不断增加时迭代更新。
+
+\subsection{课程学习式后训练策略}
+
+训练策略采用“子动作学习 + 多任务联合 + 完整轨迹微调”的课程学习思想。第一步，从完整示教数据中切分出可复用子动作片段，使模型分别接触右臂抓饮料、右臂对准并倒水、左臂抓杯子、左臂放杯子、双臂协同倒水等关键动作模式。该阶段的目标不是得到多个彼此独立的策略，而是让同一策略模型在任务角色 token 和阶段 prompt 条件下学习不同动作模式的基本控制规律。
+
+第二步，将多个子任务混合到同一训练集中进行多任务联合训练，并使用均衡采样避免高频或较长子任务主导梯度。训练样本通过 task role token 区分任务角色，通过 phase-aware prompt 区分阶段，使模型在同一参数空间中学习“当前应该由哪只手完成什么动作”。这种做法比按顺序单独训练同一套网络更稳妥，因为后者容易使后训练技能覆盖前面技能。
+
+第三步，在完整任务轨迹上继续微调，使模型学习子动作之间的时序衔接，例如从右臂抓瓶过渡到瓶口对准，从双臂对准过渡到右臂倾倒，以及从停止倾倒过渡到左臂放杯。完整轨迹微调时保留部分子任务数据进行 replay/rehearsal，使模型在学习全流程连贯性的同时持续回顾早期子技能。该策略可概括为：先让模型学会每个动作，再让模型学会什么时候做哪个动作，最后让模型学会把这些动作连成完整任务流。
+
+\subsection{技能覆盖防护与轻量微调}
+
+如果直接按照“右臂抓瓶、右臂倒水、左臂抓杯、左臂放杯”的顺序训练同一策略网络，后训练技能可能覆盖前面已学习的动作分布，表现为抓瓶能力下降、夹爪开合时机漂移或非任务手臂产生额外动作。为降低该风险，本文采用四类措施：其一，混合采样不同子任务，保持各类动作模式在训练中的可见性；其二，使用任务角色编码和阶段提示将不同技能显式区分，减少梯度对同一动作语义的混淆；其三，在完整轨迹微调阶段保留子任务 replay 数据，借鉴持续学习中的 rehearsal 思想；其四，优先采用 LoRA/adapter 类参数高效微调方式，仅更新少量适配参数或解码侧参数，减少对预训练 VLA 主干能力的扰动。
 
 \subsection{真机安全执行策略}
-饮品倾倒涉及液体和人机共处，必须加入工作空间限幅、双臂距离约束、倾倒角速度限制、液面终止策略和异常回退策略。若检测到瓶子滑移、杯子倾斜、液体洒出或视觉目标丢失，系统应立即进入安全保持或撤回阶段。
 
-\section{实验设计与评价指标}
-数据集建议分为单臂基础操作、双臂协同操作、完整任务轨迹和扰动泛化数据。对比方法包括无 BTA 的 GR00T/VLA 后训练模型、ACT 风格双臂 action chunk 模型、集成式双臂动作预测模型、仅左右臂解耦但无阶段感知的模型，以及完整 BTA 模型。核心指标包括任务成功率、三分之一液面误差、左右臂末端轨迹误差、瓶口与杯口对准误差、洒漏率、碰撞/近碰撞次数、杯垫放置误差、平均推理延迟和单次任务完成时间。
+真机部署中，模型输出动作需经过安全执行层处理。第一，动作限幅用于约束关节速度、末端位姿增量、瓶身倾角和双臂工作空间边界。第二，轨迹平滑用于降低相邻动作块之间的不连续性，可对重叠动作块进行加权融合，并限制末端加速度。第三，夹爪约束用于避免抓取前过早闭合、递送或倾倒中意外松开，以及杯子放置后未及时释放。第四，观测超时保护用于处理视觉目标丢失、推理延迟异常或机器人状态回读中断；当异常持续超过阈值时，系统进入保持、撤回或人工接管状态。
 
-\section{创新点总结}
-本项目的创新点不在于重新提出一个大规模 VLA 基础模型，而在于面向智元 G1 双臂饮品服务任务，设计轻量级、可部署的双臂任务感知适配模块 BTA。其主要特点包括任务角色 token、阶段感知 prompt、左右臂动作子空间划分、role-aware masked loss 以及真机安全执行策略。
+\clearpage
+\section{实验验证思路}
 
-\section{结论与后续工作}
-本文围绕“基于 GR00T/VLA 的双臂机器人饮品服务系统”提出技术报告初稿。系统以智元 G1 双臂机器人为平台，以 GR00T 类 VLA 基础模型为核心，结合 ACT 的 action chunk、TinyVLA 的轻量适配思想、双臂解耦交互框架、YOTO 的 motion mask、Transformer 双臂模仿学习中的注意力抑制干扰和 DAISS 的阶段感知 mask loss，设计 BTA。后续工作可完善真机数据采集与标注工具，引入液面高度估计和接触状态检测，并扩展到更多服务任务。
+\subsection{实验平台与场景}
+
+实验拟采用智元 G1 双臂机器人作为真机平台，桌面环境包含多种饮品、杯子、杯垫和背景干扰物。感知输入包括全局相机和左右腕部相机，控制输出包括左右臂动作和夹爪动作。实验场景应覆盖不同饮品类别、不同初始位置、不同语言指令表达以及轻微物体位置扰动。为保证结果可复核，每次实验应记录初始物体布局、语言指令、任务阶段标签、模型输出动作块、执行状态和失败原因，后续实测数据补充时可统一写入表\ref{tab:results_placeholder}。
+
+\begin{figure}[htbp]
+  \centering
+  \placeholderfigure{此处预留真机实验场景图：包括智元 G1 双臂机器人、桌面饮品、杯子、杯垫、相机布局与安全工作区。}
+  \caption{双臂机器人饮品服务真机实验场景}
+  \label{fig:real_scene}
+\end{figure}
+
+\subsection{实验一：多饮品抓取与递送任务}
+
+实验一用于验证系统对不同饮品、不同位置和不同语言指令的执行能力。每次实验给定一条语言指令，例如“把左侧的矿泉水递给我”或“请拿起桌面中间的饮料并放到指定位置”。机器人需要完成目标识别、接近、抓取、抬升、递送或放置。该实验重点考察语言条件目标选择、单臂主导动作稳定性以及非任务手臂保持能力。若出现失败，应区分目标识别错误、右臂接近误差、夹爪闭合时机错误、抓取后滑落和非任务手臂误动作等类型，以对应 BTA 的分项损失诊断。
+
+\subsection{实验二：双臂协同倒水任务}
+
+实验二用于验证双臂协同倒水能力。任务要求右臂抓取饮品并将液体倒入杯子约三分之一，左臂抓取杯子并在倒水后将杯子放置到杯垫上。该实验包含右臂抓瓶、左臂抓杯、双臂对准、右臂倾倒、停止倾倒、左臂放杯和双臂撤回等阶段，重点考察阶段切换、左右臂角色分工和协同执行稳定性。该实验不只记录最终是否成功，还应记录瓶口与杯口对准情况、倾倒开始和停止时刻、杯子稳定性、液体洒漏情况以及杯子落到杯垫的偏差，从而分析失败是否由阶段切换、右臂倾角控制或左臂持杯稳定性引起。
+
+\subsection{对比与消融验证}
+
+为验证 BTA 的实际作用，后续实验可设置基础 VLA 后训练策略作为对照，即直接使用整体 action chunk 和统一模仿学习损失；在此基础上逐步加入任务角色 token、阶段感知 prompt、动作子空间加权损失和子任务 replay，形成消融对比。该设计不要求改变机器人硬件或主干模型，只需在训练条件和损失统计方式上进行控制，适合评估轻量适配模块是否改善非任务手臂误触发、阶段切换稳定性和失败可诊断性。当前报告仅给出实验设计，具体成功率、误差和推理延迟需在真机测试完成后据实填写。
+
+\subsection{评价指标}
+
+实验结果将在后续真机测试完成后补充，本文当前仅给出评价指标与记录表。除总体任务成功率外，还需记录左右臂、左右夹爪分项动作误差和失败类型，以分析 BTA 对非任务手臂误触发及阶段切换稳定性的影响。
+
+\begin{table}[htbp]
+  \centering
+  \caption{实验评价指标与记录项}
+  \label{tab:metrics}
+  \begin{tabularx}{\linewidth}{>{\centering\arraybackslash}p{0.08\linewidth}p{0.36\linewidth}X}
+    \toprule
+    序号 & 指标 & 记录说明 \\
+    \midrule
+    1 & 抓取成功率 & 待补充：统计目标饮品或杯子被稳定抓取的比例。 \\
+    2 & 放置成功率 & 待补充：统计饮品、杯子或杯垫目标区域放置成功比例。 \\
+    3 & 倒水任务完成率 & 待补充：统计完成抓瓶、对准、倒入约三分之一和停止倾倒的比例。 \\
+    4 & 分项动作误差 & 待补充：分别记录左臂、右臂、左夹爪和右夹爪动作误差。 \\
+    5 & 阶段切换稳定性 & 待补充：统计抓取到对准、对准到倾倒、倾倒到恢复、恢复到放置等阶段切换是否平稳。 \\
+    6 & 非任务手臂误触发率 & 待补充：统计当前阶段非任务手臂产生非预期动作的比例。 \\
+    7 & 平均执行时间 & 待补充：记录单次任务从指令输入到任务结束的平均耗时。 \\
+    8 & 推理延迟 & 待补充：记录策略模型单步或单个动作块推理时间。 \\
+    9 & 失败类型统计 & 待补充：包括抓取失败、目标丢失、对准失败、洒漏、碰撞风险和阶段切换失败。 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\begin{table}[htbp]
+  \centering
+  \caption{真机实验结果占位表}
+  \label{tab:results_placeholder}
+  \begin{tabularx}{\linewidth}{p{0.24\linewidth}*{4}{>{\centering\arraybackslash}X}}
+    \toprule
+    实验任务 & 试验次数 & 成功次数 & 主要失败类型 & 备注 \\
+    \midrule
+    多饮品抓取与递送 & 待补充 & 待补充 & 待补充 & 待补充 \\
+    双臂协同倒水 & 待补充 & 待补充 & 待补充 & 待补充 \\
+    \bottomrule
+  \end{tabularx}
+\end{table}
+
+\clearpage
+\section{总结}
+
+本文围绕“面向饮品服务场景的双臂任务感知 VLA 服务机器人系统”构建了中文技术报告框架。针对真实饮品服务中整体 action chunk 难以表达左右臂角色、任务阶段和主从关系的问题，本文设计了轻量级双臂任务感知适配模块 BTA，并从任务角色 token、阶段感知 prompt、左右臂及夹爪动作子空间划分、角色感知加权损失等方面给出方法描述。训练部分采用子动作学习、多任务联合和完整轨迹微调相结合的策略，并通过混合采样、子任务 replay 和 adapter 类参数高效微调降低灾难性遗忘风险。实验部分给出多饮品抓取与递送、双臂协同倒水、对比消融验证和评价指标，不虚构尚未完成的实测结果。后续工作需补充系统网络架构图、BTA 模块图、真机实验图片和实测数据，并进一步分析不同适配模块对任务成功率、非任务手臂误触发率、阶段切换稳定性和推理延迟的影响。
+
+\clearpage
+\addcontentsline{toc}{section}{参考文献}
+\begin{thebibliography}{99}
+
+\bibitem{rt1}
+Brohan A, Brown N, Carbajal J, et al. RT-1: Robotics Transformer for Real-World Control at Scale. arXiv preprint arXiv:2212.06817, 2022.
+
+\bibitem{rt2}
+Brohan A, Chebotar Y, Finn C, et al. RT-2: Vision-Language-Action Models Transfer Web Knowledge to Robotic Control. arXiv preprint arXiv:2307.15818, 2023.
+
+\bibitem{openx}
+Open X-Embodiment Collaboration, O'Neill A, Rehman A, Gupta A, et al. Open X-Embodiment: Robotic Learning Datasets and RT-X Models. arXiv preprint arXiv:2310.08864, 2023.
+
+\bibitem{openvla}
+Kim M J, Pertsch K, Karamcheti S, et al. OpenVLA: An Open-Source Vision-Language-Action Model. arXiv preprint arXiv:2406.09246, 2024.
+
+\bibitem{octo}
+Octo Model Team, Ghosh D, Walke H, Pertsch K, et al. Octo: An Open-Source Generalist Robot Policy. arXiv preprint arXiv:2405.12213, 2024.
+
+\bibitem{bcz}
+Jang E, Irpan A, Khansari M, et al. BC-Z: Zero-Shot Task Generalization with Robotic Imitation Learning. Proceedings of the 5th Conference on Robot Learning, 2021.
+
+\bibitem{lcil}
+Lynch C, Sermanet P. Language Conditioned Imitation Learning over Unstructured Data. Robotics: Science and Systems, 2021.
+
+\bibitem{saycan}
+Ahn M, Brohan A, Brown N, et al. Do As I Can, Not As I Say: Grounding Language in Robotic Affordances. arXiv preprint arXiv:2204.01691, 2022.
+
+\bibitem{act}
+Zhao T Z, Kumar V, Levine S, Finn C. Learning Fine-Grained Bimanual Manipulation with Low-Cost Hardware. arXiv preprint arXiv:2304.13705, 2023.
+
+\bibitem{diffusionpolicy}
+Chi C, Feng S, Du Y, Xu Z, Cousineau E, Burchfiel B, Song S. Diffusion Policy: Visuomotor Policy Learning via Action Diffusion. Robotics: Science and Systems, 2023.
+
+\bibitem{dp3}
+Ze Y, Zhang G, Zhang K, Hu C, Wang M, Xu H. 3D Diffusion Policy: Generalizable Visuomotor Policy Learning via Simple 3D Representations. arXiv preprint arXiv:2403.03954, 2024.
+
+\bibitem{rdt}
+Liu S, Wu L, Li B, Tan H, Chen H, Wang Z, Xu K, Su H, Zhu J. RDT-1B: A Diffusion Foundation Model for Bimanual Manipulation. arXiv preprint arXiv:2410.07864, 2024.
+
+\bibitem{tinyvla}
+Wen J, Zhu Y, Li J, Zhu M, Tang Z, Wu K, Xu Z, Liu N, Cheng R, Shen C, Peng Y, Feng F, Tang J. TinyVLA: Towards Fast, Data-Efficient Vision-Language-Action Models for Robotic Manipulation. IEEE Robotics and Automation Letters, accepted 2025. arXiv preprint arXiv:2409.12514.
+
+\bibitem{rethinkingbimanual}
+Jiang J J, Wu X M, He Y X, Zeng L A, Wei Y L, Zhang D, Zheng W S. Rethinking Bimanual Robotic Manipulation: Learning with Decoupled Interaction Framework. arXiv preprint arXiv:2503.09186, 2025.
+
+\bibitem{yoto}
+Zhou H, Wang R, Tai Y, Deng Y, Liu G, Jia K. You Only Teach Once: Learn One-Shot Bimanual Robotic Manipulation from Video Demonstrations. arXiv preprint arXiv:2501.14208, 2025.
+
+\bibitem{dualarmtransformer}
+Kim H, Ohmura Y, Kuniyoshi Y. Transformer-based Deep Imitation Learning for Dual-Arm Robot Manipulation. arXiv preprint arXiv:2108.00385, 2021.
+
+\bibitem{daiss}
+Li F, Liu P, Wang S, Wang N, Jiang Z, Navab N, Bi Y. DAISS: Phase-Aware Imitation Learning for Dual-Arm Robotic Ultrasound-Guided Interventions. arXiv preprint arXiv:2603.07663, 2026.
+
+\end{thebibliography}
 
 \end{document}

@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
+  <defs>
+    <style>
+      .title{font:700 30px Arial,Helvetica,sans-serif;fill:#263238}
+      .subtitle{font:500 15px Arial,Helvetica,sans-serif;fill:#607d8b}
+      .h{font:700 16px Arial,Helvetica,sans-serif;fill:#263238}
+      .t{font:500 13px Arial,Helvetica,sans-serif;fill:#455a64}
+      .s{font:500 11px Arial,Helvetica,sans-serif;fill:#607d8b}
+      .phase{rx:18;ry:18;stroke-width:2}
+      .arrow{stroke:#78909c;stroke-width:2.3;fill:none;marker-end:url(#arrow)}
+      .thin{stroke:#90a4ae;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+      .icon{stroke:#546e7a;stroke-width:2.2;fill:none;stroke-linecap:round;stroke-linejoin:round}
+    </style>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#78909c"/>
+    </marker>
+  </defs>
+
+  <rect width="1600" height="900" fill="#ffffff"/>
+  <text x="800" y="55" text-anchor="middle" class="title">Figure 3-2. Beverage Service Task Flow</text>
+  <text x="800" y="82" text-anchor="middle" class="subtitle">Stage-aware bimanual manipulation with changing arm roles</text>
+
+  <!-- Legend -->
+  <rect x="1160" y="118" width="300" height="95" rx="18" fill="#fbfbfd" stroke="#d6dce2" stroke-width="2"/>
+  <circle cx="1195" cy="148" r="9" fill="#d8ecff" stroke="#98c8ed"/>
+  <text x="1215" y="153" class="s">Perception / neutral</text>
+  <circle cx="1195" cy="174" r="9" fill="#ffe0d2" stroke="#eab29a"/>
+  <text x="1215" y="179" class="s">Right-arm dominant</text>
+  <circle cx="1195" cy="200" r="9" fill="#ddeed8" stroke="#a9d19f"/>
+  <text x="1215" y="205" class="s">Left-arm dominant / support</text>
+
+  <!-- Row 1 phases -->
+  <g transform="translate(80,145)">
+    <rect width="190" height="135" class="phase" fill="#f4fbff" stroke="#b7d7ee"/>
+    <text x="95" y="32" text-anchor="middle" class="h">Observe</text>
+    <text x="95" y="55" text-anchor="middle" class="t">Scene Localization</text>
+    <circle cx="95" cy="86" r="18" class="icon"/>
+    <path d="M83 86h24M95 74v24" class="icon"/>
+    <text x="95" y="122" text-anchor="middle" class="s">PHASE: approach</text>
+  </g>
+
+  <g transform="translate(335,145)">
+    <rect width="190" height="135" class="phase" fill="#fff3ed" stroke="#eab29a"/>
+    <text x="95" y="32" text-anchor="middle" class="h">Right Grasp</text>
+    <text x="95" y="55" text-anchor="middle" class="t">Bottle</text>
+    <path d="M78 75h34v43H78zM84 64h22v11" class="icon"/>
+    <path d="M128 92c18-10 28-6 33 10" class="icon"/>
+    <text x="95" y="122" text-anchor="middle" class="s">RIGHT_GRASP_BOTTLE</text>
+  </g>
+
+  <g transform="translate(590,145)">
+    <rect width="190" height="135" class="phase" fill="#f1f9ef" stroke="#a9d19f"/>
+    <text x="95" y="32" text-anchor="middle" class="h">Left Grasp</text>
+    <text x="95" y="55" text-anchor="middle" class="t">Cup</text>
+    <path d="M72 78h45v32c0 14-45 14-45 0z" class="icon"/>
+    <path d="M117 88c21-8 26 20 3 21" class="icon"/>
+    <text x="95" y="122" text-anchor="middle" class="s">LEFT_GRASP_CUP</text>
+  </g>
+
+  <g transform="translate(845,145)">
+    <rect width="190" height="135" class="phase" fill="#f5f3ff" stroke="#c9c0ee"/>
+    <text x="95" y="32" text-anchor="middle" class="h">Bimanual Align</text>
+    <text x="95" y="55" text-anchor="middle" class="t">Bottle to Cup</text>
+    <path d="M64 93h44M82 68v50M124 74h42M145 74v44" class="icon"/>
+    <path d="M105 92h20" class="thin"/>
+    <text x="95" y="122" text-anchor="middle" class="s">BIMANUAL_HOLD_POUR</text>
+  </g>
+
+  <g transform="translate(1100,145)">
+    <rect width="190" height="135" class="phase" fill="#fff3ed" stroke="#eab29a"/>
+    <text x="95" y="32" text-anchor="middle" class="h">Pour</text>
+    <text x="95" y="55" text-anchor="middle" class="t">One-third Cup</text>
+    <path d="M67 82l48-22 15 34-48 22z" class="icon"/>
+    <path d="M126 93c18 9 24 22 14 34" class="thin"/>
+    <path d="M128 112h36v18c0 11-36 11-36 0z" class="icon"/>
+    <text x="95" y="122" text-anchor="middle" class="s">RIGHT_ALIGN_POUR</text>
+  </g>
+
+  <!-- Row 2 phases -->
+  <g transform="translate(280,510)">
+    <rect width="210" height="135" class="phase" fill="#fff3ed" stroke="#eab29a"/>
+    <text x="105" y="32" text-anchor="middle" class="h">Recover</text>
+    <text x="105" y="55" text-anchor="middle" class="t">Upright Bottle</text>
+    <path d="M76 84h34v45H76zM82 73h22v11" class="icon"/>
+    <path d="M132 74c20 12 24 35 7 52" class="thin"/>
+    <text x="105" y="122" text-anchor="middle" class="s">PHASE: recover</text>
+  </g>
+
+  <g transform="translate(590,510)">
+    <rect width="210" height="135" class="phase" fill="#f1f9ef" stroke="#a9d19f"/>
+    <text x="105" y="32" text-anchor="middle" class="h">Place Cup</text>
+    <text x="105" y="55" text-anchor="middle" class="t">On Coaster</text>
+    <ellipse cx="105" cy="113" rx="48" ry="10" class="icon"/>
+    <path d="M83 78h45v28c0 13-45 13-45 0z" class="icon"/>
+    <text x="105" y="122" text-anchor="middle" class="s">LEFT_PLACE_CUP</text>
+  </g>
+
+  <g transform="translate(900,510)">
+    <rect width="210" height="135" class="phase" fill="#f4fbff" stroke="#b7d7ee"/>
+    <text x="105" y="32" text-anchor="middle" class="h">Retreat</text>
+    <text x="105" y="55" text-anchor="middle" class="t">Safe Reset</text>
+    <path d="M74 104h62M92 82v45M120 82v45" class="icon"/>
+    <path d="M146 80l22 22-22 22" class="icon"/>
+    <text x="105" y="122" text-anchor="middle" class="s">PHASE: reset</text>
+  </g>
+
+  <!-- Arrows top -->
+  <path d="M270 212 H335" class="arrow"/>
+  <path d="M525 212 H590" class="arrow"/>
+  <path d="M780 212 H845" class="arrow"/>
+  <path d="M1035 212 H1100" class="arrow"/>
+  <path d="M1195 280 C1195 420 1005 438 1005 510" class="arrow"/>
+  <path d="M900 578 H800" class="arrow"/>
+  <path d="M590 578 H490" class="arrow"/>
+
+  <!-- Role timeline -->
+  <rect x="160" y="735" width="1280" height="70" rx="18" fill="#fbfbfd" stroke="#d6dce2" stroke-width="2"/>
+  <text x="200" y="766" class="h">Role Timeline</text>
+  <line x1="350" y1="770" x2="1360" y2="770" class="thin"/>
+  <circle cx="430" cy="770" r="10" fill="#d8ecff" stroke="#98c8ed"/>
+  <circle cx="580" cy="770" r="10" fill="#ffe0d2" stroke="#eab29a"/>
+  <circle cx="735" cy="770" r="10" fill="#ddeed8" stroke="#a9d19f"/>
+  <circle cx="890" cy="770" r="10" fill="#f0eaff" stroke="#c9c0ee"/>
+  <circle cx="1045" cy="770" r="10" fill="#ffe0d2" stroke="#eab29a"/>
+  <circle cx="1200" cy="770" r="10" fill="#ddeed8" stroke="#a9d19f"/>
+  <text x="430" y="796" text-anchor="middle" class="s">observe</text>
+  <text x="580" y="796" text-anchor="middle" class="s">right active</text>
+  <text x="735" y="796" text-anchor="middle" class="s">left active</text>
+  <text x="890" y="796" text-anchor="middle" class="s">coordinated</text>
+  <text x="1045" y="796" text-anchor="middle" class="s">right pour</text>
+  <text x="1200" y="796" text-anchor="middle" class="s">left place</text>
+</svg>
