@@ -1,0 +1,229 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="760" viewBox="0 0 1400 760">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#111111"/>
+    </marker>
+    <style>
+      text {
+        font-family: "Times New Roman", "Nimbus Roman", Georgia, serif;
+      }
+      .title {
+        font-size: 36px;
+        font-weight: 700;
+        fill: #111111;
+      }
+      .subtitle {
+        font-size: 17px;
+        font-style: italic;
+        fill: #555555;
+      }
+      .formula {
+        font-size: 30px;
+        font-style: italic;
+        fill: #111111;
+      }
+      .header {
+        font-size: 20px;
+        font-weight: 700;
+        fill: #111111;
+      }
+      .label {
+        font-size: 19px;
+        fill: #111111;
+      }
+      .small {
+        font-size: 16px;
+        fill: #333333;
+      }
+      .tiny {
+        font-size: 14px;
+        fill: #444444;
+      }
+      .module {
+        fill: #fbf8ff;
+        stroke: #b79add;
+        stroke-width: 2.2;
+      }
+      .formula-box {
+        fill: #ffffff;
+        stroke: #8d7ab3;
+        stroke-width: 1.5;
+      }
+      .table-line {
+        stroke: #c7c7c7;
+        stroke-width: 1.2;
+        fill: none;
+      }
+      .table-border {
+        stroke: #b8b8b8;
+        stroke-width: 1.4;
+        fill: #ffffff;
+      }
+      .header-fill {
+        fill: #f3f0f8;
+      }
+      .arrow {
+        stroke: #111111;
+        stroke-width: 2.5;
+        fill: none;
+        marker-end: url(#arrow);
+      }
+      .lower {
+        fill: #ffffff;
+        stroke: #555555;
+        stroke-width: 1.7;
+      }
+      .blue-light {
+        fill: #e6f1ff;
+        stroke: #2e73b8;
+      }
+      .green-light {
+        fill: #e9f7ec;
+        stroke: #2f8a43;
+      }
+      .purple-light {
+        fill: #f1e8fb;
+        stroke: #7b54b3;
+      }
+      .orange-light {
+        fill: #fff0e2;
+        stroke: #d97706;
+      }
+      .blue-dark {
+        fill: #2e73b8;
+      }
+      .green-dark {
+        fill: #2f8a43;
+      }
+      .purple-dark {
+        fill: #7b54b3;
+      }
+      .orange-dark {
+        fill: #d97706;
+      }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1400" height="760" fill="#ffffff"/>
+
+  <!-- Input and output arrows -->
+  <path class="arrow" d="M55 365 H150"/>
+  <text class="small" x="102" y="343" text-anchor="middle">role / phase</text>
+  <text class="small" x="102" y="386" text-anchor="middle">condition</text>
+
+  <path class="arrow" d="M1250 365 H1345"/>
+  <text class="small" x="1298" y="343" text-anchor="middle">weighted</text>
+  <text class="small" x="1298" y="386" text-anchor="middle">training loss</text>
+
+  <!-- Main module -->
+  <rect class="module" x="150" y="70" width="1100" height="620" rx="20"/>
+
+  <text class="title" x="700" y="122" text-anchor="middle">Role-aware Weighted Loss</text>
+  <text class="subtitle" x="700" y="152" text-anchor="middle">Dynamically reweight action supervision according to active subskill role</text>
+
+  <!-- Formula box -->
+  <rect class="formula-box" x="245" y="180" width="910" height="78" rx="12"/>
+  <text class="formula" x="700" y="229" text-anchor="middle">
+    L<tspan baseline-shift="sub" font-size="17">BTA</tspan>
+    <tspan font-style="normal"> = </tspan>
+    w<tspan baseline-shift="sub" font-size="17">L</tspan>L<tspan baseline-shift="sub" font-size="17">L</tspan>
+    <tspan font-style="normal"> + </tspan>
+    w<tspan baseline-shift="sub" font-size="17">R</tspan>L<tspan baseline-shift="sub" font-size="17">R</tspan>
+    <tspan font-style="normal"> + </tspan>
+    w<tspan baseline-shift="sub" font-size="17">gL</tspan>L<tspan baseline-shift="sub" font-size="17">gL</tspan>
+    <tspan font-style="normal"> + </tspan>
+    w<tspan baseline-shift="sub" font-size="17">gR</tspan>L<tspan baseline-shift="sub" font-size="17">gR</tspan>
+    <tspan font-style="normal"> + </tspan>
+    λ<tspan baseline-shift="sub" font-size="17">s</tspan>L<tspan baseline-shift="sub" font-size="17">smooth</tspan>
+  </text>
+
+  <!-- Table background -->
+  <rect class="table-border" x="230" y="295" width="940" height="272" rx="10"/>
+  <rect class="header-fill" x="230" y="295" width="940" height="54" rx="10"/>
+  <rect x="230" y="322" width="940" height="27" fill="#f3f0f8"/>
+
+  <!-- Table grid -->
+  <line class="table-line" x1="230" y1="349" x2="1170" y2="349"/>
+  <line class="table-line" x1="230" y1="403" x2="1170" y2="403"/>
+  <line class="table-line" x1="230" y1="457" x2="1170" y2="457"/>
+  <line class="table-line" x1="230" y1="511" x2="1170" y2="511"/>
+  <line class="table-line" x1="230" y1="565" x2="1170" y2="565"/>
+
+  <line class="table-line" x1="470" y1="295" x2="470" y2="567"/>
+  <line class="table-line" x1="610" y1="295" x2="610" y2="567"/>
+  <line class="table-line" x1="750" y1="295" x2="750" y2="567"/>
+  <line class="table-line" x1="890" y1="295" x2="890" y2="567"/>
+  <line class="table-line" x1="1030" y1="295" x2="1030" y2="567"/>
+
+  <!-- Header labels -->
+  <text class="header" x="350" y="329" text-anchor="middle">Subskill / Role</text>
+  <text class="header" x="540" y="329" text-anchor="middle">w<tspan baseline-shift="sub" font-size="12">L</tspan></text>
+  <text class="header" x="680" y="329" text-anchor="middle">w<tspan baseline-shift="sub" font-size="12">R</tspan></text>
+  <text class="header" x="820" y="329" text-anchor="middle">w<tspan baseline-shift="sub" font-size="12">gL</tspan></text>
+  <text class="header" x="960" y="329" text-anchor="middle">w<tspan baseline-shift="sub" font-size="12">gR</tspan></text>
+  <text class="header" x="1100" y="329" text-anchor="middle">λ<tspan baseline-shift="sub" font-size="12">s</tspan></text>
+
+  <!-- Row 1: Right Grasp -->
+  <rect class="blue-light" x="270" y="361" width="160" height="30" rx="8" stroke-width="1.5"/>
+  <text class="label" x="350" y="383" text-anchor="middle">Right Grasp</text>
+
+  <rect class="lower" x="502" y="366" width="20" height="20" rx="3"/>
+  <text class="label" x="550" y="383" text-anchor="middle">0.1</text>
+  <rect class="blue-dark" x="632" y="368" width="62" height="16" rx="4"/>
+  <text class="label" x="710" y="383" text-anchor="middle">1.0</text>
+  <rect class="lower" x="782" y="366" width="20" height="20" rx="3"/>
+  <text class="label" x="830" y="383" text-anchor="middle">0.1</text>
+  <rect class="blue-dark" x="912" y="368" width="62" height="16" rx="4"/>
+  <text class="label" x="990" y="383" text-anchor="middle">1.0</text>
+  <text class="label" x="1100" y="383" text-anchor="middle">0.1</text>
+
+  <!-- Row 2: Right Pour -->
+  <rect class="green-light" x="270" y="415" width="160" height="30" rx="8" stroke-width="1.5"/>
+  <text class="label" x="350" y="437" text-anchor="middle">Right Pour</text>
+
+  <rect class="lower" x="502" y="420" width="20" height="20" rx="3"/>
+  <text class="label" x="550" y="437" text-anchor="middle">0.2</text>
+  <rect class="green-dark" x="632" y="422" width="62" height="16" rx="4"/>
+  <text class="label" x="710" y="437" text-anchor="middle">1.0</text>
+  <rect class="lower" x="782" y="420" width="20" height="20" rx="3"/>
+  <text class="label" x="830" y="437" text-anchor="middle">0.1</text>
+  <rect class="green-dark" x="912" y="422" width="62" height="16" rx="4"/>
+  <text class="label" x="990" y="437" text-anchor="middle">1.0</text>
+  <text class="label" x="1100" y="437" text-anchor="middle">0.1</text>
+
+  <!-- Row 3: Left Grasp -->
+  <rect class="purple-light" x="270" y="469" width="160" height="30" rx="8" stroke-width="1.5"/>
+  <text class="label" x="350" y="491" text-anchor="middle">Left Grasp</text>
+
+  <rect class="purple-dark" x="492" y="476" width="62" height="16" rx="4"/>
+  <text class="label" x="570" y="491" text-anchor="middle">1.0</text>
+  <rect class="lower" x="642" y="474" width="20" height="20" rx="3"/>
+  <text class="label" x="690" y="491" text-anchor="middle">0.1</text>
+  <rect class="purple-dark" x="772" y="476" width="62" height="16" rx="4"/>
+  <text class="label" x="850" y="491" text-anchor="middle">1.0</text>
+  <rect class="lower" x="922" y="474" width="20" height="20" rx="3"/>
+  <text class="label" x="970" y="491" text-anchor="middle">0.1</text>
+  <text class="label" x="1100" y="491" text-anchor="middle">0.1</text>
+
+  <!-- Row 4: Bimanual -->
+  <rect class="orange-light" x="270" y="523" width="160" height="30" rx="8" stroke-width="1.5"/>
+  <text class="label" x="350" y="545" text-anchor="middle">Bimanual</text>
+
+  <rect class="orange-dark" x="492" y="530" width="62" height="16" rx="4"/>
+  <text class="label" x="570" y="545" text-anchor="middle">1.0</text>
+  <rect class="orange-dark" x="632" y="530" width="62" height="16" rx="4"/>
+  <text class="label" x="710" y="545" text-anchor="middle">1.0</text>
+  <rect class="orange-dark" x="772" y="530" width="62" height="16" rx="4"/>
+  <text class="label" x="850" y="545" text-anchor="middle">1.0</text>
+  <rect class="orange-dark" x="912" y="530" width="62" height="16" rx="4"/>
+  <text class="label" x="990" y="545" text-anchor="middle">1.0</text>
+  <text class="label" x="1100" y="545" text-anchor="middle">0.1</text>
+
+  <!-- Legend -->
+  <rect x="365" y="598" width="670" height="50" rx="10" fill="#ffffff" stroke="#c7c7c7" stroke-width="1.2"/>
+  <rect class="lower" x="405" y="613" width="20" height="20" rx="3"/>
+  <text class="small" x="442" y="629">lower weight</text>
+  <rect class="orange-dark" x="615" y="615" width="50" height="16" rx="4"/>
+  <text class="small" x="685" y="629">higher weight</text>
+  <text class="tiny" x="840" y="629">color = active subskill / role</text>
+</svg>

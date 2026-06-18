@@ -1,0 +1,356 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1050" viewBox="0 0 1800 1050">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#111111"/>
+    </marker>
+    <marker id="arrow-blue" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1f6fb2"/>
+    </marker>
+    <marker id="arrow-green" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#2b8a3e"/>
+    </marker>
+    <marker id="arrow-purple" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#7048a8"/>
+    </marker>
+    <marker id="arrow-orange" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#d97706"/>
+    </marker>
+    <style>
+      text { font-family: "Times New Roman", "Nimbus Roman", serif; }
+      .title { font-size: 42px; font-weight: 700; }
+      .subtitle { font-size: 24px; font-style: italic; fill: #444444; }
+      .module-title { font-size: 24px; font-weight: 700; }
+      .section-title { font-size: 19px; font-weight: 700; }
+      .small { font-size: 15px; }
+      .body { font-size: 17px; }
+      .italic { font-style: italic; }
+      .formula { font-size: 22px; font-style: italic; }
+      .formula-lg { font-size: 27px; font-style: italic; }
+      .box { fill: #ffffff; stroke: #222222; stroke-width: 1.4; }
+      .thin { stroke-width: 1.2; }
+      .arrow { stroke: #111111; stroke-width: 2.3; fill: none; marker-end: url(#arrow); }
+      .dash { stroke-dasharray: 7 6; }
+      .blue { fill: #e8f2ff; stroke: #1f6fb2; }
+      .green { fill: #e9f8ec; stroke: #2b8a3e; }
+      .purple { fill: #f1e9fb; stroke: #7048a8; }
+      .yellow { fill: #fff4d8; stroke: #e8a317; }
+      .orange { fill: #fff0e2; stroke: #d97706; }
+      .gray { fill: #eeeeee; stroke: #7a7a7a; }
+    </style>
+  </defs>
+
+  <rect x="0" y="0" width="1800" height="1050" fill="#ffffff"/>
+
+  <text class="title" x="900" y="45" text-anchor="middle">BTA: Bimanual Task-aware Adapter</text>
+  <text class="subtitle" x="900" y="82" text-anchor="middle">Inject task role and phase into a VLA policy and decode role-aware bimanual actions</text>
+
+  <!-- Module 1 -->
+  <rect x="50" y="110" width="430" height="430" rx="14" fill="#f8fbff" stroke="#1f6fb2" stroke-width="1.8"/>
+  <circle cx="88" cy="140" r="16" fill="#1f6fb2"/>
+  <text x="88" y="147" font-size="21" font-weight="700" fill="#ffffff" text-anchor="middle">1</text>
+  <text class="module-title" x="120" y="148" fill="#164a86">Multimodal Conditions</text>
+
+  <rect class="box" x="70" y="170" width="390" height="76" rx="8"/>
+  <rect x="89" y="194" width="52" height="34" rx="5" fill="#d9d9d9" stroke="#222" stroke-width="2"/>
+  <rect x="101" y="185" width="26" height="12" rx="3" fill="#c7c7c7" stroke="#222" stroke-width="2"/>
+  <circle cx="115" cy="211" r="11" fill="#8c8c8c" stroke="#222" stroke-width="2"/>
+  <polygon points="141,202 158,194 158,228 141,220" fill="#a9a9a9" stroke="#222" stroke-width="2"/>
+  <text class="section-title" x="180" y="197">Visual Observation</text>
+  <g transform="translate(180,208)">
+    <rect width="33" height="26" rx="2" fill="#e7e7e7" stroke="#777"/>
+    <polygon points="3,24 14,12 25,24" fill="#c7a986"/>
+    <circle cx="27" cy="6" r="3" fill="#999"/>
+    <rect x="42" width="33" height="26" rx="2" fill="#e7e7e7" stroke="#777"/>
+    <polygon points="45,24 56,12 67,24" fill="#c7a986"/>
+    <circle cx="69" cy="6" r="3" fill="#999"/>
+    <rect x="84" width="33" height="26" rx="2" fill="#e7e7e7" stroke="#777"/>
+    <polygon points="87,24 98,12 109,24" fill="#c7a986"/>
+    <circle cx="111" cy="6" r="3" fill="#999"/>
+    <rect x="126" width="33" height="26" rx="2" fill="#e7e7e7" stroke="#777"/>
+    <polygon points="129,24 140,12 151,24" fill="#c7a986"/>
+    <circle cx="153" cy="6" r="3" fill="#999"/>
+    <text x="175" y="23" font-size="24" font-weight="700">...</text>
+  </g>
+
+  <rect class="box" x="70" y="258" width="390" height="92" rx="8"/>
+  <path d="M92 280 h54 a10 10 0 0 1 10 10 v32 a10 10 0 0 1 -10 10 h-32 l-15 14 v-14 h-7 a10 10 0 0 1 -10 -10 v-32 a10 10 0 0 1 10 -10 z" fill="#f7fbff" stroke="#1f6fb2" stroke-width="3"/>
+  <circle cx="109" cy="307" r="3.2" fill="#1f6fb2"/>
+  <circle cx="120" cy="307" r="3.2" fill="#1f6fb2"/>
+  <circle cx="131" cy="307" r="3.2" fill="#1f6fb2"/>
+  <text class="section-title" x="180" y="285">Language Instruction</text>
+  <text class="small italic" x="180" y="310">“Pour water from the bottle into the cup</text>
+  <text class="small italic" x="180" y="329">and place the cup on the coaster.”</text>
+
+  <rect class="box" x="70" y="362" width="390" height="72" rx="8"/>
+  <circle cx="105" cy="419" r="10" fill="#c9c9c9" stroke="#222" stroke-width="2"/>
+  <circle cx="130" cy="394" r="10" fill="#c9c9c9" stroke="#222" stroke-width="2"/>
+  <circle cx="153" cy="376" r="8" fill="#c9c9c9" stroke="#222" stroke-width="2"/>
+  <line x1="112" y1="412" x2="124" y2="400" stroke="#777" stroke-width="9" stroke-linecap="round"/>
+  <line x1="137" y1="390" x2="147" y2="382" stroke="#777" stroke-width="8" stroke-linecap="round"/>
+  <line x1="158" y1="374" x2="173" y2="366" stroke="#222" stroke-width="3"/>
+  <line x1="158" y1="380" x2="174" y2="386" stroke="#222" stroke-width="3"/>
+  <text class="section-title" x="195" y="389">Robot State</text>
+  <g transform="translate(195,402)">
+    <rect class="blue" width="18" height="22" rx="3" stroke-width="1.4"/>
+    <rect class="blue" x="26" width="18" height="22" rx="3" stroke-width="1.4"/>
+    <rect class="blue" x="52" width="18" height="22" rx="3" stroke-width="1.4"/>
+    <rect class="blue" x="78" width="18" height="22" rx="3" stroke-width="1.4"/>
+    <rect class="blue" x="104" width="18" height="22" rx="3" stroke-width="1.4"/>
+    <text x="143" y="18" font-size="20" font-weight="700">...</text>
+    <text class="formula" x="198" y="18">s<tspan baseline-shift="sub" font-size="13">t</tspan> ∈ R<tspan baseline-shift="super" font-size="13">d_s</tspan></text>
+  </g>
+
+  <rect class="box" x="70" y="446" width="390" height="74" rx="8"/>
+  <circle cx="120" cy="483" r="24" fill="#ffffff" stroke="#222" stroke-width="3"/>
+  <line x1="120" y1="483" x2="120" y2="466" stroke="#222" stroke-width="3" stroke-linecap="round"/>
+  <line x1="120" y1="483" x2="137" y2="483" stroke="#222" stroke-width="3" stroke-linecap="round"/>
+  <text class="section-title" x="180" y="473">Phase Prompt</text>
+  <g transform="translate(180,488)">
+    <rect class="blue" width="30" height="22" rx="3" stroke-width="1.4"/>
+    <rect class="green" x="42" width="30" height="22" rx="3" stroke-width="1.4"/>
+    <rect class="purple" x="84" width="30" height="22" rx="3" stroke-width="1.4"/>
+    <rect class="yellow" x="126" width="30" height="22" rx="3" stroke-width="1.4"/>
+    <rect class="orange" x="168" width="30" height="22" rx="3" stroke-width="1.4"/>
+    <text x="220" y="19" font-size="22" font-weight="700">...</text>
+  </g>
+
+  <rect x="50" y="560" width="430" height="205" rx="14" fill="#f8fbff" stroke="#1f6fb2" stroke-width="1.8"/>
+  <text class="section-title" x="265" y="590" fill="#164a86" text-anchor="middle">Task Role Token</text>
+  <g font-size="15" font-style="italic">
+    <rect x="86" y="606" width="350" height="26" rx="4" fill="#ffffff" stroke="#6d89af"/>
+    <rect class="blue" x="101" y="610" width="18" height="18" rx="3" stroke-width="1.3"/>
+    <text x="255" y="624" text-anchor="middle">RIGHT_GRASP_BOTTLE</text>
+    <rect x="86" y="636" width="350" height="26" rx="4" fill="#ffffff" stroke="#6d89af"/>
+    <rect class="green" x="101" y="640" width="18" height="18" rx="3" stroke-width="1.3"/>
+    <text x="255" y="654" text-anchor="middle">RIGHT_ALIGN_POUR</text>
+    <rect x="86" y="666" width="350" height="26" rx="4" fill="#ffffff" stroke="#6d89af"/>
+    <rect class="purple" x="101" y="670" width="18" height="18" rx="3" stroke-width="1.3"/>
+    <text x="255" y="684" text-anchor="middle">LEFT_GRASP_CUP</text>
+    <rect x="86" y="696" width="350" height="26" rx="4" fill="#ffffff" stroke="#6d89af"/>
+    <rect class="yellow" x="101" y="700" width="18" height="18" rx="3" stroke-width="1.3"/>
+    <text x="255" y="714" text-anchor="middle">LEFT_PLACE_CUP</text>
+    <rect x="86" y="726" width="350" height="26" rx="4" fill="#ffffff" stroke="#6d89af"/>
+    <rect class="orange" x="101" y="730" width="18" height="18" rx="3" stroke-width="1.3"/>
+    <text x="255" y="744" text-anchor="middle">BIMANUAL_HOLD_POUR</text>
+  </g>
+
+  <!-- Module 2 -->
+  <rect x="535" y="110" width="500" height="655" rx="14" fill="#fcfffc" stroke="#2b8a3e" stroke-width="1.8"/>
+  <circle cx="573" cy="140" r="16" fill="#2b8a3e"/>
+  <text x="573" y="147" font-size="21" font-weight="700" fill="#ffffff" text-anchor="middle">2</text>
+  <text class="module-title" x="605" y="148" fill="#246f34">Bimanual Task-aware Adapter</text>
+
+  <rect x="555" y="170" width="460" height="415" rx="14" fill="#ffffff" stroke="#2b8a3e" stroke-width="1.7" stroke-dasharray="8 6"/>
+  <text class="section-title" x="785" y="198" fill="#246f34" text-anchor="middle">BTA Module</text>
+
+  <rect x="585" y="215" width="310" height="88" rx="9" fill="#f7fff8" stroke="#2b8a3e" stroke-width="1.5"/>
+  <text class="section-title" x="740" y="239" text-anchor="middle">Role Embedding</text>
+  <text class="small" x="740" y="260" text-anchor="middle">Encode task role (who does what)</text>
+  <g transform="translate(612,271)">
+    <rect class="blue" width="22" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="green" x="48" width="22" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="purple" x="96" width="22" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="yellow" x="144" width="22" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="orange" x="192" width="22" height="22" rx="3" stroke-width="1.3"/>
+  </g>
+  <text class="formula" x="910" y="266">E<tspan baseline-shift="sub" font-size="13">role</tspan> ∈ R<tspan baseline-shift="super" font-size="13">n_r × d</tspan></text>
+
+  <circle cx="740" cy="322" r="15" fill="#ffffff" stroke="#222" stroke-width="1.4"/>
+  <text x="740" y="329" font-size="23" font-weight="700" text-anchor="middle">+</text>
+
+  <rect x="585" y="342" width="310" height="88" rx="9" fill="#f7fff8" stroke="#2b8a3e" stroke-width="1.5"/>
+  <text class="section-title" x="740" y="366" text-anchor="middle">Phase Embedding</text>
+  <text class="small" x="740" y="387" text-anchor="middle">Encode phase / subskill (when)</text>
+  <g transform="translate(612,398)">
+    <rect class="blue" width="22" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="green" x="48" width="22" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="purple" x="96" width="22" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="yellow" x="144" width="22" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="orange" x="192" width="22" height="22" rx="3" stroke-width="1.3"/>
+  </g>
+  <text class="formula" x="910" y="393">E<tspan baseline-shift="sub" font-size="13">phase</tspan> ∈ R<tspan baseline-shift="super" font-size="13">n_p × d</tspan></text>
+
+  <circle cx="740" cy="449" r="15" fill="#ffffff" stroke="#222" stroke-width="1.4"/>
+  <text x="740" y="456" font-size="23" font-weight="700" text-anchor="middle">+</text>
+
+  <rect x="585" y="470" width="310" height="92" rx="9" fill="#f7fff8" stroke="#2b8a3e" stroke-width="1.5"/>
+  <text class="section-title" x="740" y="493" text-anchor="middle">Lightweight Adapter / LoRA</text>
+  <text class="small" x="740" y="513" text-anchor="middle">Inject to VLA hidden states</text>
+  <rect x="615" y="525" width="92" height="27" rx="4" fill="#dcecff" stroke="#416c9b" stroke-width="1.4"/>
+  <text class="small italic" x="661" y="544" text-anchor="middle">A ∈ R<tspan baseline-shift="super" font-size="10">d × r</tspan></text>
+  <circle cx="740" cy="538" r="14" fill="#ffffff" stroke="#222" stroke-width="1.2"/>
+  <text x="740" y="545" font-size="21" font-weight="700" text-anchor="middle">×</text>
+  <rect x="773" y="525" width="92" height="27" rx="4" fill="#dcecff" stroke="#416c9b" stroke-width="1.4"/>
+  <text class="small italic" x="819" y="544" text-anchor="middle">B ∈ R<tspan baseline-shift="super" font-size="10">r × d</tspan></text>
+  <text class="formula" x="910" y="536">ΔW = BA</text>
+
+  <path class="arrow" d="M785 585 V620"/>
+  <rect x="555" y="620" width="460" height="58" rx="9" fill="#ffffff" stroke="#222" stroke-width="1.4"/>
+  <text x="610" y="655" font-size="26" fill="#1f6fb2" text-anchor="middle">❄</text>
+  <text class="module-title" x="760" y="654" text-anchor="middle">VLA Backbone</text>
+  <text class="small" x="910" y="654" text-anchor="middle">(frozen / low-LR)</text>
+  <text class="body italic" x="785" y="712" fill="#555555" text-anchor="middle">Vision–Language–Action Transformer</text>
+
+  <!-- Input-to-BTA arrows -->
+  <path class="arrow" d="M460 208 H505 V305 H555"/>
+  <path class="arrow" d="M460 398 H505 V305 H555"/>
+  <path class="arrow" d="M460 483 H505 V516 H585"/>
+  <path class="arrow" d="M480 663 H505 V516 H585"/>
+
+  <!-- Module 3 -->
+  <rect x="1090" y="110" width="660" height="655" rx="14" fill="#fefcff" stroke="#7048a8" stroke-width="1.8"/>
+  <circle cx="1128" cy="140" r="16" fill="#7048a8"/>
+  <text x="1128" y="147" font-size="21" font-weight="700" fill="#ffffff" text-anchor="middle">3</text>
+  <text class="module-title" x="1160" y="148" fill="#4c2b7e">Action Subspace Decoder</text>
+  <text class="body" x="1420" y="183" text-anchor="middle">Decode action chunk into subspaces</text>
+
+  <rect class="box" x="1125" y="202" width="590" height="52" rx="8"/>
+  <g transform="translate(1145,217)">
+    <rect class="blue" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="blue" x="27" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="blue" x="54" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <text x="90" y="18" font-size="23" font-weight="700">...</text>
+    <rect class="green" x="138" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="green" x="165" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="green" x="192" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <text x="228" y="18" font-size="23" font-weight="700">...</text>
+    <rect class="purple" x="276" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="purple" x="303" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="purple" x="330" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <text x="366" y="18" font-size="23" font-weight="700">...</text>
+    <rect class="orange" x="414" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="orange" x="441" width="18" height="22" rx="3" stroke-width="1.3"/>
+    <rect class="orange" x="468" width="18" height="22" rx="3" stroke-width="1.3"/>
+  </g>
+
+  <text class="formula-lg" x="1420" y="302" text-anchor="middle">Â<tspan baseline-shift="sub" font-size="16">t</tspan> = [Â<tspan baseline-shift="sub" font-size="16">L</tspan>, Â<tspan baseline-shift="sub" font-size="16">R</tspan>, Â<tspan baseline-shift="sub" font-size="16">gL</tspan>, Â<tspan baseline-shift="sub" font-size="16">gR</tspan>]</text>
+
+  <path d="M1420 320 V348 H1185 V375" stroke="#1f6fb2" stroke-width="2.3" fill="none" marker-end="url(#arrow-blue)"/>
+  <path d="M1420 348 H1340 V375" stroke="#2b8a3e" stroke-width="2.3" fill="none" marker-end="url(#arrow-green)"/>
+  <path d="M1420 348 H1495 V375" stroke="#7048a8" stroke-width="2.3" fill="none" marker-end="url(#arrow-purple)"/>
+  <path d="M1420 348 H1648 V375" stroke="#d97706" stroke-width="2.3" fill="none" marker-end="url(#arrow-orange)"/>
+
+  <g>
+    <rect class="blue" x="1120" y="375" width="130" height="112" rx="9" stroke-width="2"/>
+    <text class="section-title" x="1185" y="407" text-anchor="middle">Left Arm</text>
+    <text class="section-title" x="1185" y="429" text-anchor="middle">Decoder</text>
+    <circle cx="1158" cy="452" r="5.5" fill="#ffffff" stroke="#1f6fb2" stroke-width="1.7"/>
+    <circle cx="1185" cy="452" r="5.5" fill="#ffffff" stroke="#1f6fb2" stroke-width="1.7"/>
+    <circle cx="1212" cy="452" r="5.5" fill="#ffffff" stroke="#1f6fb2" stroke-width="1.7"/>
+    <circle cx="1170" cy="469" r="5.5" fill="#ffffff" stroke="#1f6fb2" stroke-width="1.7"/>
+    <circle cx="1200" cy="469" r="5.5" fill="#ffffff" stroke="#1f6fb2" stroke-width="1.7"/>
+    <line x1="1163" y1="455" x2="1166" y2="465" stroke="#1f6fb2" stroke-width="1.2"/>
+    <line x1="1185" y1="458" x2="1174" y2="466" stroke="#1f6fb2" stroke-width="1.2"/>
+    <line x1="1210" y1="457" x2="1203" y2="466" stroke="#1f6fb2" stroke-width="1.2"/>
+    <path d="M1185 487 V518" stroke="#1f6fb2" stroke-width="2.2" fill="none" marker-end="url(#arrow-blue)"/>
+    <rect x="1120" y="518" width="130" height="46" rx="7" fill="#ffffff" stroke="#1f6fb2" stroke-width="2"/>
+    <rect class="blue" x="1135" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="blue" x="1160" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="blue" x="1185" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="blue" x="1210" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <text class="formula" x="1185" y="608" text-anchor="middle">Â_L ∈ R<tspan baseline-shift="super" font-size="13">d_L</tspan></text>
+    <text class="section-title" x="1185" y="645" fill="#1f6fb2" text-anchor="middle">Left Arm Action</text>
+  </g>
+
+  <g>
+    <rect class="green" x="1275" y="375" width="130" height="112" rx="9" stroke-width="2"/>
+    <text class="section-title" x="1340" y="407" text-anchor="middle">Right Arm</text>
+    <text class="section-title" x="1340" y="429" text-anchor="middle">Decoder</text>
+    <circle cx="1313" cy="452" r="5.5" fill="#ffffff" stroke="#2b8a3e" stroke-width="1.7"/>
+    <circle cx="1340" cy="452" r="5.5" fill="#ffffff" stroke="#2b8a3e" stroke-width="1.7"/>
+    <circle cx="1367" cy="452" r="5.5" fill="#ffffff" stroke="#2b8a3e" stroke-width="1.7"/>
+    <circle cx="1325" cy="469" r="5.5" fill="#ffffff" stroke="#2b8a3e" stroke-width="1.7"/>
+    <circle cx="1355" cy="469" r="5.5" fill="#ffffff" stroke="#2b8a3e" stroke-width="1.7"/>
+    <line x1="1318" y1="455" x2="1321" y2="465" stroke="#2b8a3e" stroke-width="1.2"/>
+    <line x1="1340" y1="458" x2="1329" y2="466" stroke="#2b8a3e" stroke-width="1.2"/>
+    <line x1="1365" y1="457" x2="1358" y2="466" stroke="#2b8a3e" stroke-width="1.2"/>
+    <path d="M1340 487 V518" stroke="#2b8a3e" stroke-width="2.2" fill="none" marker-end="url(#arrow-green)"/>
+    <rect x="1275" y="518" width="130" height="46" rx="7" fill="#ffffff" stroke="#2b8a3e" stroke-width="2"/>
+    <rect class="green" x="1290" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="green" x="1315" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="green" x="1340" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="green" x="1365" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <text class="formula" x="1340" y="608" text-anchor="middle">Â_R ∈ R<tspan baseline-shift="super" font-size="13">d_R</tspan></text>
+    <text class="section-title" x="1340" y="645" fill="#2b8a3e" text-anchor="middle">Right Arm Action</text>
+  </g>
+
+  <g>
+    <rect class="purple" x="1430" y="375" width="130" height="112" rx="9" stroke-width="2"/>
+    <text class="section-title" x="1495" y="407" text-anchor="middle">Left Gripper</text>
+    <text class="section-title" x="1495" y="429" text-anchor="middle">Decoder</text>
+    <circle cx="1468" cy="452" r="5.5" fill="#ffffff" stroke="#7048a8" stroke-width="1.7"/>
+    <circle cx="1495" cy="452" r="5.5" fill="#ffffff" stroke="#7048a8" stroke-width="1.7"/>
+    <circle cx="1522" cy="452" r="5.5" fill="#ffffff" stroke="#7048a8" stroke-width="1.7"/>
+    <circle cx="1480" cy="469" r="5.5" fill="#ffffff" stroke="#7048a8" stroke-width="1.7"/>
+    <circle cx="1510" cy="469" r="5.5" fill="#ffffff" stroke="#7048a8" stroke-width="1.7"/>
+    <line x1="1473" y1="455" x2="1476" y2="465" stroke="#7048a8" stroke-width="1.2"/>
+    <line x1="1495" y1="458" x2="1484" y2="466" stroke="#7048a8" stroke-width="1.2"/>
+    <line x1="1520" y1="457" x2="1513" y2="466" stroke="#7048a8" stroke-width="1.2"/>
+    <path d="M1495 487 V518" stroke="#7048a8" stroke-width="2.2" fill="none" marker-end="url(#arrow-purple)"/>
+    <rect x="1430" y="518" width="130" height="46" rx="7" fill="#ffffff" stroke="#7048a8" stroke-width="2"/>
+    <rect class="purple" x="1445" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="purple" x="1470" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="purple" x="1495" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="purple" x="1520" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <text class="formula" x="1495" y="608" text-anchor="middle">Â_gL ∈ R<tspan baseline-shift="super" font-size="13">d_gL</tspan></text>
+    <text class="section-title" x="1495" y="645" fill="#7048a8" text-anchor="middle">Left Gripper</text>
+  </g>
+
+  <g>
+    <rect class="orange" x="1583" y="375" width="130" height="112" rx="9" stroke-width="2"/>
+    <text class="section-title" x="1648" y="407" text-anchor="middle">Right Gripper</text>
+    <text class="section-title" x="1648" y="429" text-anchor="middle">Decoder</text>
+    <circle cx="1621" cy="452" r="5.5" fill="#ffffff" stroke="#d97706" stroke-width="1.7"/>
+    <circle cx="1648" cy="452" r="5.5" fill="#ffffff" stroke="#d97706" stroke-width="1.7"/>
+    <circle cx="1675" cy="452" r="5.5" fill="#ffffff" stroke="#d97706" stroke-width="1.7"/>
+    <circle cx="1633" cy="469" r="5.5" fill="#ffffff" stroke="#d97706" stroke-width="1.7"/>
+    <circle cx="1663" cy="469" r="5.5" fill="#ffffff" stroke="#d97706" stroke-width="1.7"/>
+    <line x1="1626" y1="455" x2="1629" y2="465" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="1648" y1="458" x2="1637" y2="466" stroke="#d97706" stroke-width="1.2"/>
+    <line x1="1673" y1="457" x2="1666" y2="466" stroke="#d97706" stroke-width="1.2"/>
+    <path d="M1648 487 V518" stroke="#d97706" stroke-width="2.2" fill="none" marker-end="url(#arrow-orange)"/>
+    <rect x="1583" y="518" width="130" height="46" rx="7" fill="#ffffff" stroke="#d97706" stroke-width="2"/>
+    <rect class="orange" x="1598" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="orange" x="1623" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="orange" x="1648" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <rect class="orange" x="1673" y="531" width="18" height="21" rx="3" stroke-width="1.3"/>
+    <text class="formula" x="1648" y="608" text-anchor="middle">Â_gR ∈ R<tspan baseline-shift="super" font-size="13">d_gR</tspan></text>
+    <text class="section-title" x="1648" y="645" fill="#d97706" text-anchor="middle">Right Gripper</text>
+  </g>
+
+  <path class="arrow" d="M1015 649 H1090"/>
+
+  <!-- Module 4 -->
+  <rect x="50" y="790" width="1700" height="150" rx="14" fill="#fffdf8" stroke="#d97706" stroke-width="1.8"/>
+  <circle cx="88" cy="822" r="16" fill="#b36b00"/>
+  <text x="88" y="829" font-size="21" font-weight="700" fill="#ffffff" text-anchor="middle">4</text>
+  <text class="module-title" x="120" y="830" fill="#a25b00">Role-aware Weighted Loss</text>
+  <text class="body italic" x="90" y="868">Role-aware loss balances</text>
+  <text class="body italic" x="90" y="890">supervision based on active</text>
+  <text class="body italic" x="90" y="912">role and phase.</text>
+
+  <rect x="420" y="822" width="705" height="86" rx="9" fill="#ffffff" stroke="#d99a18" stroke-width="1.4"/>
+  <text class="formula-lg" x="772" y="875" text-anchor="middle">L<tspan baseline-shift="sub" font-size="16">BTA</tspan> = w<tspan baseline-shift="sub" font-size="16">L</tspan>L<tspan baseline-shift="sub" font-size="16">L</tspan> + w<tspan baseline-shift="sub" font-size="16">R</tspan>L<tspan baseline-shift="sub" font-size="16">R</tspan> + w<tspan baseline-shift="sub" font-size="16">gL</tspan>L<tspan baseline-shift="sub" font-size="16">gL</tspan> + w<tspan baseline-shift="sub" font-size="16">gR</tspan>L<tspan baseline-shift="sub" font-size="16">gR</tspan> + λ<tspan baseline-shift="sub" font-size="16">s</tspan>L<tspan baseline-shift="sub" font-size="16">smooth</tspan></text>
+
+  <rect x="1160" y="812" width="560" height="110" rx="9" fill="#ffffff" stroke="#777777" stroke-width="1.3" stroke-dasharray="7 5"/>
+  <text class="small" x="1188" y="837">L<tspan baseline-shift="sub" font-size="10">L</tspan>: Left arm action loss</text>
+  <text class="small" x="1188" y="861">L<tspan baseline-shift="sub" font-size="10">R</tspan>: Right arm action loss</text>
+  <text class="small" x="1188" y="885">L<tspan baseline-shift="sub" font-size="10">gL</tspan>: Left gripper loss</text>
+  <text class="small" x="1445" y="837">L<tspan baseline-shift="sub" font-size="10">gR</tspan>: Right gripper loss</text>
+  <text class="small" x="1445" y="861">L<tspan baseline-shift="sub" font-size="10">smooth</tspan>: Temporal smoothness</text>
+  <text class="small" x="1445" y="885">w, λ: Role/phase-dependent weights</text>
+
+  <path d="M1420 765 V780 H1095 V822" stroke="#777777" stroke-width="1.4" fill="none" stroke-dasharray="6 5"/>
+  <path d="M1420 765 V780 H1728 V867 H1720" stroke="#777777" stroke-width="1.4" fill="none" stroke-dasharray="6 5"/>
+
+  <!-- Legend -->
+  <rect x="210" y="962" width="1380" height="58" rx="9" fill="#ffffff" stroke="#555555" stroke-width="1.3"/>
+  <rect class="blue" x="240" y="979" width="30" height="23" rx="3" stroke-width="1.4"/>
+  <text class="body" x="288" y="997">Blue = right-arm dominant</text>
+  <rect class="purple" x="555" y="979" width="30" height="23" rx="3" stroke-width="1.4"/>
+  <text class="body" x="603" y="997">Purple = left-arm dominant</text>
+  <rect class="orange" x="870" y="979" width="30" height="23" rx="3" stroke-width="1.4"/>
+  <text class="body" x="918" y="997">Orange = bimanual coordination</text>
+  <rect class="gray" x="1230" y="979" width="30" height="23" rx="3" stroke-width="1.4"/>
+  <text class="body" x="1278" y="997">Gray = auxiliary / keep-safe action</text>
+</svg>
